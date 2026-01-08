@@ -23,6 +23,11 @@
     .price{font-weight:700;color:#ff5f9a}
     .btn{margin-top:10px;padding:8px 12px;border:none;border-radius:12px;background:linear-gradient(90deg,#ff5f9a,#ff84b2);color:#fff;font-weight:600;cursor:pointer}
     .footer{text-align:center;margin:30px 0;color:#7a2a56}
+    .drawer{position:fixed;right:12px;bottom:12px;width:320px;background:#fff;border:1px solid #f4c2d8;border-radius:16px;box-shadow:0 12px 36px rgba(0,0,0,.12);padding:14px;display:none;max-height:70vh;overflow:auto}
+    .drawer h3{margin:0 0 8px;font-family:'Playfair Display',serif;color:#7a2a56}
+    .cart-item{display:flex;gap:10px;align-items:center;border:1px solid #f7d5e6;border-radius:12px;padding:8px;margin-bottom:8px}
+    .cart-item img{width:54px;height:54px;object-fit:cover;border-radius:10px}
+    .cart-item .info{flex:1}
   </style>
 </head>
 <body>
@@ -43,6 +48,16 @@
     <div id="grid" class="grid"></div>
   </main>
 
+  <aside id="drawer" class="drawer">
+    <h3>Your cart</h3>
+    <div id="cartList"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+      <strong>Total:</strong>
+      <strong id="cartTotal">₦0</strong>
+    </div>
+    <button id="checkout" class="btn" style="width:100%;margin-top:10px">Checkout</button>
+  </aside>
+
   <footer class="container footer">
     © <span id="year"></span> Ann’s Ventures — <a href="admin.html">Admin</a>
   </footer>
@@ -61,10 +76,33 @@ function render(){
   products.forEach((p,i)=>{
     const el=document.createElement('div');el.className='card';
     el.innerHTML=`<img src="${p.image||'assets/placeholder.jpg'}"><div class="body"><div class="title">${p.title}</div><div class="meta"><span class="pill">${p.category}</span><span class="price">${fmtPrice(p.price)}</span></div><button class="btn">Add to cart</button></div>`;
-    el.querySelector('.btn').addEventListener('click',()=>{cart.push(p);document.getElementById('cartCount').textContent=cart.length;});
+    el.querySelector('.btn').addEventListener('click',()=>{cart.push(p);renderCart();});
     grid.appendChild(el);
   });
 }
+function renderCart(){
+  const list=document.getElementById('cartList');list.innerHTML='';
+  let total=0;
+  cart.forEach((c,idx)=>{
+    total+=Number(c.price)||0;
+    const row=document.createElement('div');row.className='cart-item';
+    row.innerHTML=`<img src="${c.image||'assets/placeholder.jpg'}"><div class="info"><div style="font-weight:600;color:#7a2a56">${c.title}</div><div class="price">${fmtPrice(c.price)}</div></div><button class="btn" style="background:#fff;color:#7a2a56;border:1px solid #f3a6c6" data-r="${idx}">Remove</button>`;
+    row.querySelector('[data-r]').addEventListener('click',()=>{cart.splice(idx,1);renderCart();});
+    list.appendChild(row);
+  });
+  document.getElementById('cartTotal').textContent=fmtPrice(total);
+  document.getElementById('cartCount').textContent=cart.length;
+}
+document.getElementById('cartToggle').addEventListener('click',()=>{
+  const d=document.getElementById('drawer');
+  d.style.display=d.style.display==='none'||d.style.display===''?'block':'none';
+});
+document.getElementById('checkout').addEventListener('click',()=>{
+  let msg="Hello Ann’s Ventures! I’d like to order:\n";
+  cart.forEach(c=>{ msg+=`- ${c.title} (₦${c.price})\n`; });
+  const url="https://wa.me/234?text="+encodeURIComponent(msg);
+  window.open(url,'_blank');
+});
 document.getElementById('year').textContent=new Date().getFullYear();
 loadProducts();render();
 </script>
