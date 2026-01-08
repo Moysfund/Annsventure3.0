@@ -3,219 +3,329 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>ANN’S VENTURES — Boutique</title>
+  <title>Admin — Ann’s Ventures</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
       --pink-1:#ffe4ef; --pink-2:#ffd6e8; --accent:#ff5f9a; --accent-2:#ff84b2;
       --dark:#2a2a2a; --muted:#6b6b6b; --card:#fff; --shadow:0 14px 40px rgba(255,95,154,.18);
-      --radius:18px; --container:1100px;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:'Poppins',sans-serif;color:var(--dark);background:linear-gradient(180deg,#fff,var(--pink-2) 60%,#fff)}
-    a{text-decoration:none;color:inherit}
-    .container{max-width:var(--container);margin:0 auto;padding:20px}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
-    .brand{display:flex;align-items:center;gap:10px}
-    .logo{width:48px;height:48px;border-radius:14px;border:5px solid var(--pink-2);object-fit:cover;background:#fff}
-    .brand .name{font-family:'Playfair Display',serif;font-weight:700;color:#7a2a56;font-size:22px}
-
-    .hero{margin:6px 0 18px;background:linear-gradient(135deg,#fff 0%,#ffeef6 50%,#ffd6e8 100%);border:1px solid #f8cfe1;border-radius:24px;box-shadow:var(--shadow);padding:28px;display:flex;gap:24px;align-items:center;justify-content:space-between}
-    .hero-text{max-width:640px}
-    .hero h1{font-family:'Playfair Display',serif;color:#7a2a56;margin:0 0 8px;font-size:34px}
-    .hero p{margin:0;color:#6b3758}
-    .badge{display:inline-block;margin-top:10px;background:#fff;border:1px solid #f3a6c6;color:#8b3b64;border-radius:999px;padding:6px 12px;font-size:12px;animation:pulse 1.6s infinite}
-    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,95,154,.35)}70%{box-shadow:0 0 0 12px rgba(255,95,154,0)}100%{box-shadow:0 0 0 0 rgba(255,95,154,0)}}
-
-    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
-    .search{flex:1;min-width:220px}
-    .input{width:100%;padding:11px 12px;border-radius:12px;border:1px solid #f1c1d7;background:#fff}
-    .filter{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{padding:8px 12px;border-radius:999px;border:1px solid #f3a6c6;background:#fff;color:#7a2a56;cursor:pointer;font-size:13px}
-    .chip.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border:none}
-
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-    @media (max-width:960px){.grid{grid-template-columns:repeat(3,1fr)}}
-    @media (max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:480px){.grid{grid-template-columns:1fr}}
-    .card{background:#fff;border:1px solid #f4c2d8;border-radius:16px;overflow:hidden;box-shadow:0 10px 26px rgba(255,95,154,.12)}
-    .card img{width:100%;height:190px;object-fit:cover}
-    .card .body{padding:12px}
-    .card .title{font-weight:600;color:#7a2a56}
-    .card .meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+    body{margin:0;font-family:'Poppins',sans-serif;color:var(--dark);
+      background:linear-gradient(180deg,#fff,var(--pink-2) 52%,#fff)}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+    .card{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:20px;width:100%;max-width:900px}
+    .title{font-family:'Playfair Display',serif;color:#7a2a56;margin:0 0 6px}
+    .muted{color:var(--muted)}
+    input,select,button{font-family:inherit}
+    input,select{width:100%;padding:10px;border-radius:12px;border:1px solid #f1c1d7;background:#fff}
+    .btn{padding:10px 14px;border:none;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;font-weight:600;cursor:pointer}
+    .btn.ghost{background:#fff;color:#7a2a56;border:1px solid #f3a6c6}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .grid-1{display:grid;grid-template-columns:1fr;gap:8px}
+    .list{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+    .item{display:flex;gap:12px;align-items:flex-start;border:1px solid #f4c2d8;border-radius:14px;padding:10px;background:#fff}
+    .item img{width:72px;height:72px;border-radius:12px;object-fit:cover}
+    .item .meta{flex:1}
     .pill{background:linear-gradient(90deg,#fff,var(--pink-1));border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64}
     .price{font-weight:700;color:var(--accent)}
-    .btn{display:inline-block;margin-top:10px;padding:9px 12px;border:none;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;font-weight:600;cursor:pointer}
-
-    .cart-btn{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #f3a6c6;color:#7a2a56;border-radius:12px;padding:8px 12px;cursor:pointer}
-    .cart-count{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border-radius:999px;padding:2px 8px;font-size:12px}
-
-    .drawer{position:fixed;right:12px;bottom:12px;width:320px;background:#fff;border:1px solid #f4c2d8;border-radius:16px;box-shadow:0 12px 36px rgba(0,0,0,.12);padding:14px;display:none;max-height:70vh;overflow:auto}
-    .drawer h3{margin:0 0 8px;font-family:'Playfair Display',serif;color:#7a2a56}
-    .cart-item{display:flex;gap:10px;align-items:center;border:1px solid #f7d5e6;border-radius:12px;padding:8px;margin-bottom:8px}
-    .cart-item img{width:54px;height:54px;object-fit:cover;border-radius:10px}
-    .cart-item .info{flex:1}
-    .footer{margin:28px 0;color:#7a2a56;text-align:center}
-    .footer a{color:#7a2a56;text-decoration:underline}
+    .preview{margin-top:8px}
+    .preview img{max-width:160px;border-radius:12px;border:1px solid #f6cfe0}
+    @media (max-width:740px){ .grid-2{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
-  <header class="container nav">
-    <div class="brand">
-      <img src="assets/logo.png" alt="logo" class="logo">
-      <div class="name">Ann’s Ventures</div>
-    </div>
-    <button id="cartToggle" class="cart-btn">
-      <span>Cart</span>
-      <span id="cartCount" class="cart-count">0</span>
-    </button>
-  </header>
+  <div class="wrap">
+    <div class="card">
+      <div class="title">Admin — Ann’s Ventures</div>
+      <div class="muted">Secure login • Add, edit, delete products • Image preview • Export backup</div>
 
-  <section class="container hero">
-    <div class="hero-text">
-      <h1>Grand opening — sweet styles, sweet prices</h1>
-      <p>Explore curated wears and delightful drinks. Pink vibes, quality picks, and friendly service — all in one boutique.</p>
-      <span class="badge">New arrivals drop weekly ✨</span>
-    </div>
-    <div>
-      <img src="assets/hero.jpg" alt="hero" style="width:220px;height:220px;object-fit:cover;border-radius:20px;border:8px solid #ffeaf3;background:#fff">
-    </div>
-  </section>
+      <!-- Login -->
+      <section id="login-section" style="margin-top:12px">
+        <div class="grid-2">
+          <div class="grid-1">
+            <label>Username</label>
+            <input id="username" type="text" placeholder="admin" />
+          </div>
+          <div class="grid-1">
+            <label>Password</label>
+            <input id="password" type="password" placeholder="••••••••" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button id="loginBtn" class="btn">Sign in</button>
+          <button id="setPassBtn" class="btn.ghost">Set/Change password</button>
+        </div>
+        <p class="muted" style="margin-top:8px">Default user: <strong>admin</strong>. First time? Click “Set/Change password”.</p>
+      </section>
 
-  <section class="container toolbar">
-    <div class="search"><input id="search" class="input" type="text" placeholder="Search products..." /></div>
-    <div class="filter">
-      <button class="chip active" data-cat="all">All</button>
-      <button class="chip" data-cat="wear">Wear</button>
-      <button class="chip" data-cat="drink">Drink</button>
+      <!-- Admin area -->
+      <section id="admin-section" style="display:none; margin-top:16px">
+        <div class="row" style="justify-content:space-between;align-items:center">
+          <div class="title" style="margin:0">Product manager</div>
+          <div class="row">
+            <button id="exportBtn" class="btn ghost">Export JSON</button>
+            <button id="logoutBtn" class="btn ghost">Logout</button>
+          </div>
+        </div>
+
+        <!-- Product form -->
+        <div class="grid-2" style="margin-top:12px">
+          <div class="grid-1">
+            <label>Title</label>
+            <input id="pTitle" type="text" placeholder="e.g., Floral midi dress" />
+          </div>
+          <div class="grid-1">
+            <label>Category</label>
+            <select id="pCategory">
+              <option value="wear">Wear</option>
+              <option value="drink">Drink</option>
+            </select>
+          </div>
+          <div class="grid-1">
+            <label>Price (NGN)</label>
+            <input id="pPrice" type="number" min="0" step="0.01" placeholder="5000" />
+          </div>
+          <div class="grid-1">
+            <label>Image</label>
+            <input id="pImage" type="file" accept="image/*" />
+          </div>
+        </div>
+
+        <div id="preview" class="preview" style="display:none">
+          <label>Preview</label>
+          <div><img id="previewImg" alt="preview" /></div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <button id="saveBtn" class="btn">Save product</button>
+          <button id="clearBtn" class="btn ghost" type="button">Clear</button>
+        </div>
+
+        <!-- Existing products -->
+        <div class="list" id="list"></div>
+      </section>
     </div>
-  </section>
-
-  <main class="container">
-    <div id="grid" class="grid"></div>
-  </main>
-
-  <aside id="drawer" class="drawer">
-    <h3>Your cart</h3>
-    <div id="cartList"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-      <strong>Total:</strong>
-      <strong id="cartTotal">₦0</strong>
-    </div>
-    <button id="checkout" class="btn" style="width:100%;margin-top:10px">Checkout (coming soon)</button>
-  </aside>
-
-  <footer class="container footer">
-    <div>© <span id="year"></span> Ann’s Ventures — Made with love in Lagos.</div>
-    <div><a href="admin.html">Admin</a></div>
-  </footer>
+  </div>
 
   <script>
-    const PRODUCTS_KEY='av_products';
-    const cart=[];
-    let products=[];
-    let activeCat='all';
-    let query='';
+    // Keys and constants
+    const PRODUCTS_KEY = 'av_products';
+    const PASS_KEY = 'av_admin_pass_hash';
+    const USERNAME = 'admin';
 
-    function loadProducts(){
-      try{
-        const raw=localStorage.getItem(PRODUCTS_KEY);
-        const list=JSON.parse(raw||'[]');
-        products=Array.isArray(list)?list:[];
-      }catch(e){products=[];}
-    }
+    // Elements
+    const loginSection = document.getElementById('login-section');
+    const adminSection = document.getElementById('admin-section');
+    const usernameEl = document.getElementById('username');
+    const passwordEl = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const setPassBtn = document.getElementById('setPassBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const exportBtn = document.getElementById('exportBtn');
 
+    const pTitle = document.getElementById('pTitle');
+    const pCategory = document.getElementById('pCategory');
+    const pPrice = document.getElementById('pPrice');
+    const pImage = document.getElementById('pImage');
+    const preview = document.getElementById('preview');
+    const previewImg = document.getElementById('previewImg');
+    const saveBtn = document.getElementById('saveBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const list = document.getElementById('list');
+
+    let editingId = null;
+    let currentImageData = null;
+
+    // Utils
     function fmtPrice(v){
-      const n=Number(v)||0;
-      return '₦'+n.toLocaleString('en-NG',{maximumFractionDigits:0});
+      const n = Number(v) || 0;
+      return '₦' + n.toLocaleString('en-NG', { maximumFractionDigits: 0 });
+    }
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    async function sha256Hex(message){
+      const msgUint8 = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2,'0')).join('');
     }
 
-    function render(){
-      const grid=document.getElementById('grid');
-      const q=query.trim().toLowerCase();
-      const filtered=products.filter(p=>{
-        const catOk=activeCat==='all'||(p.category||'').toLowerCase()===activeCat;
-        const text=[p.title,p.category].map(x=>(x||'').toLowerCase()).join(' ');
-        const qOk=q===''||text.includes(q);
-        return catOk&&qOk;
-      });
-      grid.innerHTML='';
-      if(filtered.length===0){
-        grid.innerHTML='<div class="card" style="grid-column:1/-1"><div class="body"><div class="title">No products found</div><p class="muted">Try a different search or category.</p></div></div>';
+    // Initial UI: hide set button if password exists in this browser
+    if(localStorage.getItem(PASS_KEY)){
+      setPassBtn.style.display = 'none';
+    }
+
+    // Set/Change password (locked: only if none exists in this browser)
+    setPassBtn.addEventListener('click', async () => {
+      if(localStorage.getItem(PASS_KEY)){
+        alert('Password already set in this browser.');
         return;
       }
-      filtered.forEach((p,i)=>{
-        const img=p.image||'assets/placeholder.jpg';
-        const price=fmtPrice(p.price);
-        const el=document.createElement('div');
-        el.className='card';
-        el.innerHTML=`
-          <img src="${img}" alt="${(p.title||'').replace(/"/g,'&quot;')}">
-          <div class="body">
-            <div class="title">${p.title||'Untitled'}</div>
-            <div class="meta">
-              <span class="pill">${(p.category||'Other')}</span>
-              <span class="price">${price}</span>
-            </div>
-            <button class="btn" data-i="${i}">Add to cart</button>
-          </div>
-        `;
-        el.querySelector('.btn').addEventListener('click',()=>addToCart(p));
-        grid.appendChild(el);
-      });
-    }
+      const user = (usernameEl.value || USERNAME).trim();
+      if(user !== USERNAME){ return alert('Username must be "admin"'); }
+      const newPass = prompt('Enter a new admin password:');
+      if(!newPass) return;
+      const h = await sha256Hex(newPass);
+      localStorage.setItem(PASS_KEY, h);
+      alert('Password saved. Use it to login.');
+      setPassBtn.style.display = 'none';
+    });
 
-    function addToCart(p){
-      cart.push({title:p.title,price:Number(p.price)||0,image:p.image});
-      renderCart();
-    }
+    // Login
+    loginBtn.addEventListener('click', async () => {
+      const user = (usernameEl.value || '').trim();
+      const pass = passwordEl.value;
+      if(user !== USERNAME){ return alert('Invalid username'); }
 
-    function renderCart(){
-      const list=document.getElementById('cartList');
-      list.innerHTML='';
-      let total=0;
-      cart.forEach((c,idx)=>{
-        total+=c.price||0;
-        const row=document.createElement('div');
-        row.className='cart-item';
-        row.innerHTML=`
-          <img src="${c.image||'assets/placeholder.jpg'}" alt="">
-          <div class="info">
-            <div style="font-weight:600;color:#7a2a56">${c.title||'Item'}</div>
-            <div class="price">${fmtPrice(c.price)}</div>
-          </div>
-          <button class="chip" data-r="${idx}">Remove</button>
-        `;
-        row.querySelector('[data-r]').addEventListener('click',()=>{
-          cart.splice(idx,1);renderCart();
+      const stored = localStorage.getItem(PASS_KEY);
+      if(!stored){ return alert('No password set in this browser. Click “Set/Change password”.'); }
+
+      const attempt = await sha256Hex(pass);
+      if(attempt !== stored){ return alert('Invalid password'); }
+
+      // Success
+      loginSection.style.display = 'none';
+      adminSection.style.display = 'block';
+      renderProducts();
+    });
+
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      adminSection.style.display = 'none';
+      loginSection.style.display = 'block';
+    });
+
+    // Image preview
+    pImage.addEventListener('change', () => {
+      const file = pImage.files[0];
+      if(!file){ currentImageData = null; preview.style.display = 'none'; return; }
+      const reader = new FileReader();
+      reader.onload = e => {
+        currentImageData = e.target.result;
+        previewImg.src = currentImageData;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Save product (create or update)
+    saveBtn.addEventListener('click', () => {
+      const title = pTitle.value.trim();
+      const category = pCategory.value.trim();
+      const price = pPrice.value.trim();
+
+      if(!title){ return alert('Enter a title'); }
+      if(!category){ return alert('Select a category'); }
+      if(!price){ return alert('Enter a price'); }
+
+      const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || '[]');
+
+      if(editingId){
+        const idx = products.findIndex(p => p.id === editingId);
+        if(idx !== -1){
+          products[idx].title = title;
+          products[idx].category = category;
+          products[idx].price = price;
+          if(currentImageData){ products[idx].image = currentImageData; }
+        }
+        editingId = null;
+      }else{
+        products.push({
+          id: Date.now(),
+          title, category, price,
+          image: currentImageData || ''
         });
-        list.appendChild(row);
-      });
-      document.getElementById('cartTotal').textContent=fmtPrice(total);
-      document.getElementById('cartCount').textContent=String(cart.length);
+      }
+
+      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+      clearForm();
+      renderProducts();
+      alert('Saved.');
+    });
+
+    // Clear form
+    clearBtn.addEventListener('click', clearForm);
+    function clearForm(){
+      pTitle.value = '';
+      pPrice.value = '';
+      pImage.value = '';
+      preview.style.display = 'none';
+      previewImg.src = '';
+      currentImageData = null;
+      editingId = null;
     }
 
-    // Events
-    document.getElementById('cartToggle').addEventListener('click',()=>{
-      const d=document.getElementById('drawer');
-      d.style.display=d.style.display==='none'||d.style.display===''?'block':'none';
-    });
-    document.getElementById('search').addEventListener('input',e=>{
-      query=e.target.value;render();
-    });
-    document.querySelectorAll('.chip').forEach(chip=>{
-      chip.addEventListener('click',()=>{
-        document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-        chip.classList.add('active');
-        activeCat=chip.getAttribute('data-cat');
-        render();
-      });
-    });
+    // Render products
+    function renderProducts(){
+      const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || '[]');
+      list.innerHTML = '';
 
-    // Init
-    document.getElementById('year').textContent=new Date().getFullYear();
-    loadProducts();
-    render();
+      if(!products.length){
+        list.innerHTML = '<div class="muted">No products yet. Add your first product above.</div>';
+        return;
+      }
+
+      products.forEach((p) => {
+        const div = document.createElement('div');
+        div.className = 'item';
+
+        div.innerHTML = `
+          <img src="${escapeHtml(p.image || 'assets/placeholder.jpg')}" alt="">
+          <div class="meta">
+            <div style="font-weight:600;color:#7a2a56">${escapeHtml(p.title)}</div>
+            <div class="pill" style="display:inline-block;margin-top:4px">${escapeHtml(p.category)}</div>
+            <div class="price" style="margin-top:4px">${fmtPrice(p.price)}</div>
+          </div>
+          <div class="row" style="align-items:center">
+            <button class="btn ghost" data-edit="${p.id}">Edit</button>
+            <button class="btn ghost" data-del="${p.id}" style="color:#a12e58;border-color:#f0a0be">Delete</button>
+          </div>
+        `;
+
+        // Edit
+        div.querySelector(`[data-edit="${p.id}"]`).addEventListener('click', () => {
+          editingId = p.id;
+          pTitle.value = p.title || '';
+          pCategory.value = p.category || 'wear';
+          pPrice.value = p.price || '';
+          if(p.image){
+            currentImageData = p.image;
+            previewImg.src = p.image;
+            preview.style.display = 'block';
+          }else{
+            currentImageData = null;
+            preview.style.display = 'none';
+          }
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Delete
+        div.querySelector(`[data-del="${p.id}"]`).addEventListener('click', () => {
+          if(!confirm('Delete this product?')) return;
+          const arr = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || '[]');
+          const idx = arr.findIndex(x => x.id === p.id);
+          if(idx !== -1){
+            arr.splice(idx, 1);
+            localStorage.setItem(PRODUCTS_KEY, JSON.stringify(arr));
+            renderProducts();
+          }
+        });
+
+        list.appendChild(div);
+      });
+    }
+
+    // Export JSON
+    exportBtn.addEventListener('click', () => {
+      const products = localStorage.getItem(PRODUCTS_KEY) || '[]';
+      const blob = new Blob([products], { type:'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'products.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
   </script>
 </body>
 </html>
