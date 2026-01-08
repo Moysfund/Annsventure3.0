@@ -9,10 +9,16 @@
     body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(180deg,#fff,#ffd6e8 60%,#fff);color:#2a2a2a}
     .container{max-width:1100px;margin:0 auto;padding:20px}
     .nav{display:flex;justify-content:space-between;align-items:center}
-    .brand{font-family:'Playfair Display',serif;font-size:24px;color:#7a2a56}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand img{width:48px;height:48px;border-radius:14px;border:4px solid #ffd6e8;object-fit:cover;background:#fff}
+    .brand span{font-family:'Playfair Display',serif;font-size:24px;color:#7a2a56}
     .cart-btn{background:#fff;border:1px solid #f3a6c6;border-radius:12px;padding:8px 12px;cursor:pointer}
-    .hero{margin:20px 0;padding:28px;border-radius:20px;background:linear-gradient(135deg,#fff,#ffeef6,#ffd6e8);display:flex;gap:20px;align-items:center}
-    .hero h1{font-family:'Playfair Display',serif;color:#7a2a56;margin:0}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:20px 0}
+    .search{flex:1;min-width:220px}
+    .input{width:100%;padding:11px;border-radius:12px;border:1px solid #f1c1d7;background:#fff}
+    .filter{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{padding:8px 12px;border-radius:999px;border:1px solid #f3a6c6;background:#fff;color:#7a2a56;cursor:pointer;font-size:13px}
+    .chip.active{background:linear-gradient(90deg,#ff5f9a,#ff84b2);color:#fff;border:none}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
     .card{background:#fff;border:1px solid #f4c2d8;border-radius:16px;overflow:hidden;box-shadow:0 10px 26px rgba(255,95,154,.12)}
     .card img{width:100%;height:180px;object-fit:cover}
@@ -32,16 +38,21 @@
 </head>
 <body>
   <header class="container nav">
-    <div class="brand">Ann’s Ventures</div>
+    <div class="brand">
+      <img src="assets/logo.png" alt="logo">
+      <span>Ann’s Ventures</span>
+    </div>
     <button id="cartToggle" class="cart-btn">Cart (<span id="cartCount">0</span>)</button>
   </header>
 
-  <section class="container hero">
-    <div>
-      <h1>Grand Opening — Sweet Styles</h1>
-      <p>Explore curated wears and delightful drinks. Pink vibes, quality picks, and friendly service.</p>
+  <!-- Toolbar with search + category filter -->
+  <section class="container toolbar">
+    <div class="search"><input id="search" class="input" type="text" placeholder="Search products..." /></div>
+    <div class="filter">
+      <button class="chip active" data-cat="all">All</button>
+      <button class="chip" data-cat="wear">Wear</button>
+      <button class="chip" data-cat="drink">Drink</button>
     </div>
-    <img src="assets/hero.jpg" alt="hero" style="width:220px;height:220px;object-fit:cover;border-radius:20px;border:8px solid #ffeaf3">
   </section>
 
   <main class="container">
@@ -65,6 +76,7 @@
 <script>
 const PRODUCTS_KEY='av_products';
 let products=[],cart=[];
+let activeCat='all',query='';
 
 function loadProducts(){
   try{products=JSON.parse(localStorage.getItem(PRODUCTS_KEY)||'[]');}catch(e){products=[];}
@@ -72,8 +84,15 @@ function loadProducts(){
 function fmtPrice(v){return '₦'+(Number(v)||0).toLocaleString();}
 function render(){
   const grid=document.getElementById('grid');grid.innerHTML='';
-  if(products.length===0){grid.innerHTML='<p>No products yet. Check back soon!</p>';return;}
-  products.forEach((p,i)=>{
+  const q=query.trim().toLowerCase();
+  const filtered=products.filter(p=>{
+    const catOk=activeCat==='all'||(p.category||'').toLowerCase()===activeCat;
+    const text=[p.title,p.category].map(x=>(x||'').toLowerCase()).join(' ');
+    const qOk=q===''||text.includes(q);
+    return catOk&&qOk;
+  });
+  if(filtered.length===0){grid.innerHTML='<p>No products found.</p>';return;}
+  filtered.forEach((p)=>{
     const el=document.createElement('div');el.className='card';
     el.innerHTML=`<img src="${p.image||'assets/placeholder.jpg'}"><div class="body"><div class="title">${p.title}</div><div class="meta"><span class="pill">${p.category}</span><span class="price">${fmtPrice(p.price)}</span></div><button class="btn">Add to cart</button></div>`;
     el.querySelector('.btn').addEventListener('click',()=>{cart.push(p);renderCart();});
@@ -100,11 +119,4 @@ document.getElementById('cartToggle').addEventListener('click',()=>{
 document.getElementById('checkout').addEventListener('click',()=>{
   let msg="Hello Ann’s Ventures! I’d like to order:\n";
   cart.forEach(c=>{ msg+=`- ${c.title} (₦${c.price})\n`; });
-  const url="https://wa.me/2349046588565?text="+encodeURIComponent(msg);
-  window.open(url,'_blank');
-});
-document.getElementById('year').textContent=new Date().getFullYear();
-loadProducts();render();
-</script>
-</body>
-</html>
+  const url
