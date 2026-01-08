@@ -6,13 +6,14 @@
   <title>Ann’s Ventures — Boutique</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(180deg,#fff,#ffd6e8 60%,#fff);color:#2a2a2a}
+    body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(180deg,#fff,#ffd6e8 60%,#fff);color:#2a2a2a;overflow-x:hidden}
     .container{max-width:1100px;margin:0 auto;padding:20px}
     .nav{display:flex;justify-content:space-between;align-items:center}
     .brand{display:flex;align-items:center;gap:10px}
     .brand img{width:48px;height:48px;border-radius:14px;border:4px solid #ffd6e8;object-fit:cover;background:#fff}
     .brand span{font-family:'Playfair Display',serif;font-size:24px;color:#7a2a56}
     .cart-btn{background:#fff;border:1px solid #f3a6c6;border-radius:12px;padding:8px 12px;cursor:pointer}
+    .highlight-bar{background:linear-gradient(90deg,#ff5f9a,#ff84b2);color:#fff;padding:8px;text-align:center;font-weight:600}
     .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:20px 0}
     .search{flex:1;min-width:220px}
     .input{width:100%;padding:11px;border-radius:12px;border:1px solid #f1c1d7;background:#fff}
@@ -34,9 +35,24 @@
     .cart-item{display:flex;gap:10px;align-items:center;border:1px solid #f7d5e6;border-radius:12px;padding:8px;margin-bottom:8px}
     .cart-item img{width:54px;height:54px;object-fit:cover;border-radius:10px}
     .cart-item .info{flex:1}
+    /* Intro popup */
+    .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:1000}
+    .modal-content{background:#fff;border-radius:20px;padding:30px;max-width:500px;text-align:center;box-shadow:0 14px 40px rgba(255,95,154,.3);animation:pop 0.6s ease}
+    @keyframes pop{0%{transform:scale(0.7);opacity:0}100%{transform:scale(1);opacity:1}}
+    .modal h2{font-family:'Playfair Display',serif;color:#7a2a56;margin:0 0 10px}
+    .modal p{color:#6b3758}
   </style>
 </head>
 <body>
+  <!-- Intro popup -->
+  <div id="introModal" class="modal">
+    <div class="modal-content">
+      <h2>Welcome to Ann’s Ventures ✨</h2>
+      <p>Your one-stop boutique for stylish wears and delightful drinks. Quality, elegance, and pink vibes await you.</p>
+      <button id="startBtn" class="btn" style="margin-top:14px">Start Shopping</button>
+    </div>
+  </div>
+
   <header class="container nav">
     <div class="brand">
       <img src="assets/logo.png" alt="logo">
@@ -44,6 +60,8 @@
     </div>
     <button id="cartToggle" class="cart-btn">Cart (<span id="cartCount">0</span>)</button>
   </header>
+
+  <div class="highlight-bar" id="highlight">New arrivals weekly ✨</div>
 
   <!-- Toolbar with search + category filter -->
   <section class="container toolbar">
@@ -70,7 +88,8 @@
   </aside>
 
   <footer class="container footer">
-    © <span id="year"></span> Ann’s Ventures — <a href="admin.html">Admin</a>
+    <div>© <span id="year"></span> Ann’s Ventures — <a href="admin.html">Admin</a></div>
+    <div style="margin-top:6px">Contact: <a href="mailto:info@annsventures.com">info@annsventures.com</a></div>
   </footer>
 
 <script>
@@ -78,10 +97,26 @@ const PRODUCTS_KEY='av_products';
 let products=[],cart=[];
 let activeCat='all',query='';
 
+// Intro popup
+document.getElementById('startBtn').addEventListener('click',()=>{
+  document.getElementById('introModal').style.display='none';
+});
+
+// Rotating highlight messages
+const highlights=["New arrivals weekly ✨","Secure checkout 💳","Nationwide delivery 🚚"];
+let hi=0;
+setInterval(()=>{
+  hi=(hi+1)%highlights.length;
+  document.getElementById('highlight').textContent=highlights[hi];
+},4000);
+
+// Load products
 function loadProducts(){
   try{products=JSON.parse(localStorage.getItem(PRODUCTS_KEY)||'[]');}catch(e){products=[];}
 }
 function fmtPrice(v){return '₦'+(Number(v)||0).toLocaleString();}
+
+// Render grid
 function render(){
   const grid=document.getElementById('grid');grid.innerHTML='';
   const q=query.trim().toLowerCase();
@@ -94,29 +129,62 @@ function render(){
   if(filtered.length===0){grid.innerHTML='<p>No products found.</p>';return;}
   filtered.forEach((p)=>{
     const el=document.createElement('div');el.className='card';
-    el.innerHTML=`<img src="${p.image||'assets/placeholder.jpg'}"><div class="body"><div class="title">${p.title}</div><div class="meta"><span class="pill">${p.category}</span><span class="price">${fmtPrice(p.price)}</span></div><button class="btn">Add to cart</button></div>`;
+    el.innerHTML=`<img src="${p.image||'assets/placeholder.jpg'}" alt=""><div class="body"><div class="title">${p.title||''}</div><div class="meta"><span class="pill">${p.category||''}</span><span class="price">${fmtPrice(p.price)}</span></div><button class="btn">Add to cart</button></div>`;
     el.querySelector('.btn').addEventListener('click',()=>{cart.push(p);renderCart();});
     grid.appendChild(el);
   });
 }
+
+// Render cart
 function renderCart(){
   const list=document.getElementById('cartList');list.innerHTML='';
   let total=0;
   cart.forEach((c,idx)=>{
     total+=Number(c.price)||0;
     const row=document.createElement('div');row.className='cart-item';
-    row.innerHTML=`<img src="${c.image||'assets/placeholder.jpg'}"><div class="info"><div style="font-weight:600;color:#7a2a56">${c.title}</div><div class="price">${fmtPrice(c.price)}</div></div><button class="btn" style="background:#fff;color:#7a2a56;border:1px solid #f3a6c6" data-r="${idx}">Remove</button>`;
+    row.innerHTML=`<img src="${c.image||'assets/placeholder.jpg'}" alt=""><div class="info"><div style="font-weight:600;color:#7a2a56">${c.title||''}</div><div class="price">${fmtPrice(c.price)}</div></div><button class="btn" style="background:#fff;color:#7a2a56;border:1px solid #f3a6c6" data-r="${idx}">Remove</button>`;
     row.querySelector('[data-r]').addEventListener('click',()=>{cart.splice(idx,1);renderCart();});
     list.appendChild(row);
   });
   document.getElementById('cartTotal').textContent=fmtPrice(total);
   document.getElementById('cartCount').textContent=cart.length;
 }
+
+// Cart drawer toggle
 document.getElementById('cartToggle').addEventListener('click',()=>{
   const d=document.getElementById('drawer');
-  d.style.display=d.style.display==='none'||d.style.display===''?'block':'none';
+  d.style.display=(d.style.display==='none'||d.style.display==='')?'block':'none';
 });
+
+// Checkout via WhatsApp
 document.getElementById('checkout').addEventListener('click',()=>{
+  if(cart.length===0){alert('Your cart is empty. Add items first.');return;}
   let msg="Hello Ann’s Ventures! I’d like to order:\n";
   cart.forEach(c=>{ msg+=`- ${c.title} (₦${c.price})\n`; });
-  const url
+  const url="https://wa.me/2349046588565?text="+encodeURIComponent(msg);
+  window.open(url,'_blank');
+});
+
+// Search and filter handlers
+document.getElementById('search').addEventListener('input',e=>{
+  query=e.target.value||'';
+  render();
+});
+document.querySelectorAll('.chip').forEach(ch=>{
+  ch.addEventListener('click',()=>{
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    ch.classList.add('active');
+    activeCat=ch.getAttribute('data-cat');
+    render();
+  });
+});
+
+// Footer year
+document.getElementById('year').textContent=new Date().getFullYear();
+
+// Init
+loadProducts();
+render();
+</script>
+</body>
+</html>
