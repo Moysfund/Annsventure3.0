@@ -1,106 +1,83 @@
-<!doctype html>
+<<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin — Ann’s Ventures</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --pink-1:#ffe4ef; --pink-2:#ffd6e8; --accent:#ff5f9a; --accent-2:#ff84b2;
-      --dark:#2a2a2a; --muted:#6b6b6b; --card:#fff; --shadow:0 14px 40px rgba(255,95,154,.18);
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:'Poppins',sans-serif;color:var(--dark);
-      background:linear-gradient(180deg,#fff,var(--pink-2) 52%,#fff)}
+    body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(180deg,#fff,#ffd6e8 60%,#fff);color:#2a2a2a}
     .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
-    .card{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:20px;width:100%;max-width:900px}
+    .card{background:#fff;border-radius:20px;box-shadow:0 14px 40px rgba(255,95,154,.18);padding:20px;width:100%;max-width:900px}
     .title{font-family:'Playfair Display',serif;color:#7a2a56;margin:0 0 6px}
-    .muted{color:var(--muted)}
     input,select,button{font-family:inherit}
     input,select{width:100%;padding:10px;border-radius:12px;border:1px solid #f1c1d7;background:#fff}
-    .btn{padding:10px 14px;border:none;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;font-weight:600;cursor:pointer}
+    .btn{padding:10px 14px;border:none;border-radius:12px;background:linear-gradient(90deg,#ff5f9a,#ff84b2);color:#fff;font-weight:600;cursor:pointer}
     .btn.ghost{background:#fff;color:#7a2a56;border:1px solid #f3a6c6}
     .row{display:flex;gap:10px;flex-wrap:wrap}
     .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .grid-1{display:grid;grid-template-columns:1fr;gap:8px}
     .list{margin-top:14px;display:flex;flex-direction:column;gap:10px}
     .item{display:flex;gap:12px;align-items:flex-start;border:1px solid #f4c2d8;border-radius:14px;padding:10px;background:#fff}
     .item img{width:72px;height:72px;border-radius:12px;object-fit:cover}
     .item .meta{flex:1}
-    .pill{background:linear-gradient(90deg,#fff,var(--pink-1));border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64}
-    .price{font-weight:700;color:var(--accent)}
-    .preview{margin-top:8px}
-    .preview img{max-width:160px;border-radius:12px;border:1px solid #f6cfe0}
-    @media (max-width:740px){ .grid-2{grid-template-columns:1fr} }
+    .pill{background:#ffe4ef;border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64}
+    .price{font-weight:700;color:#ff5f9a}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <div class="title">Admin — Ann’s Ventures</div>
-      <div class="muted">Secure login • Add, edit, delete products • Image preview • Export backup</div>
 
       <!-- Login -->
-      <section id="login-section" style="margin-top:12px">
+      <section id="login-section">
         <div class="grid-2">
-          <div class="grid-1">
-            <label>Username</label>
-            <input id="username" type="text" placeholder="admin" />
+          <div>
+            <label>Email</label>
+            <input id="email" type="email" placeholder="admin@anns.com" />
           </div>
-          <div class="grid-1">
+          <div>
             <label>Password</label>
             <input id="password" type="password" placeholder="••••••••" />
           </div>
         </div>
         <div class="row" style="margin-top:12px">
           <button id="loginBtn" class="btn">Sign in</button>
-          <button id="setPassBtn" class="btn.ghost">Set/Change password</button>
         </div>
-        <p class="muted" style="margin-top:8px">Default user: <strong>admin</strong>. First time? Click “Set/Change password”.</p>
       </section>
 
       <!-- Admin area -->
       <section id="admin-section" style="display:none; margin-top:16px">
         <div class="row" style="justify-content:space-between;align-items:center">
           <div class="title" style="margin:0">Product manager</div>
-          <div class="row">
-            <button id="exportBtn" class="btn ghost">Export JSON</button>
-            <button id="logoutBtn" class="btn ghost">Logout</button>
-          </div>
+          <button id="logoutBtn" class="btn ghost">Logout</button>
         </div>
 
         <!-- Product form -->
         <div class="grid-2" style="margin-top:12px">
-          <div class="grid-1">
+          <div>
             <label>Title</label>
-            <input id="pTitle" type="text" placeholder="e.g., Floral midi dress" />
+            <input id="pTitle" type="text" />
           </div>
-          <div class="grid-1">
+          <div>
             <label>Category</label>
             <select id="pCategory">
               <option value="wear">Wear</option>
               <option value="drink">Drink</option>
             </select>
           </div>
-          <div class="grid-1">
+          <div>
             <label>Price (NGN)</label>
-            <input id="pPrice" type="number" min="0" step="0.01" placeholder="5000" />
+            <input id="pPrice" type="number" min="0" step="0.01" />
           </div>
-          <div class="grid-1">
-            <label>Image</label>
-            <input id="pImage" type="file" accept="image/*" />
+          <div>
+            <label>Image URL</label>
+            <input id="pImage" type="text" placeholder="https://..." />
           </div>
-        </div>
-
-        <div id="preview" class="preview" style="display:none">
-          <label>Preview</label>
-          <div><img id="previewImg" alt="preview" /></div>
         </div>
 
         <div class="row" style="margin-top:12px">
           <button id="saveBtn" class="btn">Save product</button>
-          <button id="clearBtn" class="btn ghost" type="button">Clear</button>
         </div>
 
         <!-- Existing products -->
@@ -109,223 +86,83 @@
     </div>
   </div>
 
-  <script>
-    // Keys and constants
-    const PRODUCTS_KEY = 'av_products';
-    const PASS_KEY = 'av_admin_pass_hash';
-    const USERNAME = 'admin';
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-    // Elements
-    const loginSection = document.getElementById('login-section');
-    const adminSection = document.getElementById('admin-section');
-    const usernameEl = document.getElementById('username');
-    const passwordEl = document.getElementById('password');
-    const loginBtn = document.getElementById('loginBtn');
-    const setPassBtn = document.getElementById('setPassBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const exportBtn = document.getElementById('exportBtn');
+  // Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDeuEMpCf90Y8P5M0Xahwi_zMeHZeqod-Q",
+    authDomain: "annsventure-51957.firebaseapp.com",
+    projectId: "annsventure-51957",
+    storageBucket: "annsventure-51957.firebasestorage.app",
+    messagingSenderId: "1054919145056",
+    appId: "1:1054919145056:web:64c35fc1507000984b3505",
+    measurementId: "G-SSN8TYCRWQ"
+  };
 
-    const pTitle = document.getElementById('pTitle');
-    const pCategory = document.getElementById('pCategory');
-    const pPrice = document.getElementById('pPrice');
-    const pImage = document.getElementById('pImage');
-    const preview = document.getElementById('preview');
-    const previewImg = document.getElementById('previewImg');
-    const saveBtn = document.getElementById('saveBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const list = document.getElementById('list');
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    let editingId = null;
-    let currentImageData = null;
+  // Elements
+  const loginSection=document.getElementById('login-section');
+  const adminSection=document.getElementById('admin-section');
+  const emailEl=document.getElementById('email');
+  const passwordEl=document.getElementById('password');
+  const loginBtn=document.getElementById('loginBtn');
+  const logoutBtn=document.getElementById('logoutBtn');
+  const pTitle=document.getElementById('pTitle');
+  const pCategory=document.getElementById('pCategory');
+  const pPrice=document.getElementById('pPrice');
+  const pImage=document.getElementById('pImage');
+  const saveBtn=document.getElementById('saveBtn');
+  const list=document.getElementById('list');
 
-    // Utils
-    function fmtPrice(v){
-      const n = Number(v) || 0;
-      return '₦' + n.toLocaleString('en-NG', { maximumFractionDigits: 0 });
-    }
-    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-    async function sha256Hex(message){
-      const msgUint8 = new TextEncoder().encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2,'0')).join('');
-    }
+  // Login
+  loginBtn.addEventListener('click',()=>{
+    signInWithEmailAndPassword(auth,emailEl.value,passwordEl.value)
+      .then(()=>{ loginSection.style.display='none'; adminSection.style.display='block'; renderProducts(); })
+      .catch(err=>alert("Login failed: "+err.message));
+  });
 
-    // Initial UI: hide set button if password exists in this browser
-    if(localStorage.getItem(PASS_KEY)){
-      setPassBtn.style.display = 'none';
-    }
-
-    // Set/Change password (locked: only if none exists in this browser)
-    setPassBtn.addEventListener('click', async () => {
-      if(localStorage.getItem(PASS_KEY)){
-        alert('Password already set in this browser.');
-        return;
-      }
-      const user = (usernameEl.value || USERNAME).trim();
-      if(user !== USERNAME){ return alert('Username must be "admin"'); }
-      const newPass = prompt('Enter a new admin password:');
-      if(!newPass) return;
-      const h = await sha256Hex(newPass);
-      localStorage.setItem(PASS_KEY, h);
-      alert('Password saved. Use it to login.');
-      setPassBtn.style.display = 'none';
+  // Logout
+  logoutBtn.addEventListener('click',()=>{
+    signOut(auth).then(()=>{
+      adminSection.style.display='none';
+      loginSection.style.display='block';
     });
+  });
 
-    // Login
-    loginBtn.addEventListener('click', async () => {
-      const user = (usernameEl.value || '').trim();
-      const pass = passwordEl.value;
-      if(user !== USERNAME){ return alert('Invalid username'); }
+  // Save product
+  saveBtn.addEventListener('click',async ()=>{
+    const title=pTitle.value.trim();
+    const category=pCategory.value;
+    const price=pPrice.value;
+    const image=pImage.value.trim();
+    if(!title||!price){alert("Fill all fields");return;}
+    await addDoc(collection(db,"products"),{title,category,price,image});
+    pTitle.value='';pPrice.value='';pImage.value='';
+    renderProducts();
+  });
 
-      const stored = localStorage.getItem(PASS_KEY);
-      if(!stored){ return alert('No password set in this browser. Click “Set/Change password”.'); }
-
-      const attempt = await sha256Hex(pass);
-      if(attempt !== stored){ return alert('Invalid password'); }
-
-      // Success
-      loginSection.style.display = 'none';
-      adminSection.style.display = 'block';
-      renderProducts();
-    });
-
-    // Logout
-    logoutBtn.addEventListener('click', () => {
-      adminSection.style.display = 'none';
-      loginSection.style.display = 'block';
-    });
-
-    // Image preview
-    pImage.addEventListener('change', () => {
-      const file = pImage.files[0];
-      if(!file){ currentImageData = null; preview.style.display = 'none'; return; }
-      const reader = new FileReader();
-      reader.onload = e => {
-        currentImageData = e.target.result;
-        previewImg.src = currentImageData;
-        preview.style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // Save product (create or update)
-    saveBtn.addEventListener('click', () => {
-      const title = pTitle.value.trim();
-      const category = pCategory.value.trim();
-      const price = pPrice.value.trim();
-
-      if(!title){ return alert('Enter a title'); }
-      if(!category){ return alert('Select a category'); }
-      if(!price){ return alert('Enter a price'); }
-
-      const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || '[]');
-
-      if(editingId){
-        const idx = products.findIndex(p => p.id === editingId);
-        if(idx !== -1){
-          products[idx].title = title;
-          products[idx].category = category;
-          products[idx].price = price;
-          if(currentImageData){ products[idx].image = currentImageData; }
-        }
-        editingId = null;
-      }else{
-        products.push({
-          id: Date.now(),
-          title, category, price,
-          image: currentImageData || ''
-        });
-      }
-
-      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
-      clearForm();
-      renderProducts();
-      alert('Saved.');
-    });
-
-    // Clear form
-    clearBtn.addEventListener('click', clearForm);
-    function clearForm(){
-      pTitle.value = '';
-      pPrice.value = '';
-      pImage.value = '';
-      preview.style.display = 'none';
-      previewImg.src = '';
-      currentImageData = null;
-      editingId = null;
-    }
-
-    // Render products
-    function renderProducts(){
-      const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || '[]');
-      list.innerHTML = '';
-
-      if(!products.length){
-        list.innerHTML = '<div class="muted">No products yet. Add your first product above.</div>';
-        return;
-      }
-
-      products.forEach((p) => {
-        const div = document.createElement('div');
-        div.className = 'item';
-
-        div.innerHTML = `
-          <img src="${escapeHtml(p.image || 'assets/placeholder.jpg')}" alt="">
-          <div class="meta">
-            <div style="font-weight:600;color:#7a2a56">${escapeHtml(p.title)}</div>
-            <div class="pill" style="display:inline-block;margin-top:4px">${escapeHtml(p.category)}</div>
-            <div class="price" style="margin-top:4px">${fmtPrice(p.price)}</div>
-          </div>
-          <div class="row" style="align-items:center">
-            <button class="btn ghost" data-edit="${p.id}">Edit</button>
-            <button class="btn ghost" data-del="${p.id}" style="color:#a12e58;border-color:#f0a0be">Delete</button>
-          </div>
-        `;
-
-        // Edit
-        div.querySelector(`[data-edit="${p.id}"]`).addEventListener('click', () => {
-          editingId = p.id;
-          pTitle.value = p.title || '';
-          pCategory.value = p.category || 'wear';
-          pPrice.value = p.price || '';
-          if(p.image){
-            currentImageData = p.image;
-            previewImg.src = p.image;
-            preview.style.display = 'block';
-          }else{
-            currentImageData = null;
-            preview.style.display = 'none';
-          }
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Delete
-        div.querySelector(`[data-del="${p.id}"]`).addEventListener('click', () => {
-          if(!confirm('Delete this product?')) return;
-          const arr = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || '[]');
-          const idx = arr.findIndex(x => x.id === p.id);
-          if(idx !== -1){
-            arr.splice(idx, 1);
-            localStorage.setItem(PRODUCTS_KEY, JSON.stringify(arr));
-            renderProducts();
-          }
-        });
-
-        list.appendChild(div);
+  // Render products
+  async function renderProducts(){
+    list.innerHTML='';
+    const snapshot=await getDocs(collection(db,"products"));
+    snapshot.forEach(d=>{
+      const p=d.data();
+      const div=document.createElement('div');
+      div.className='item';
+      div.innerHTML=`<img src="${p.image||'assets/placeholder.jpg'}"><div class="meta"><div style="font-weight:600;color:#7a2a56">${p.title}</div><div class="pill">${p.category}</div><div class="price">₦${p.price}</div></div><button class="btn ghost" data-id="${d.id}">Delete</button>`;
+      div.querySelector('button').addEventListener('click',async ()=>{
+        await deleteDoc(doc(db,"products",d.id));
+        renderProducts();
       });
-    }
-
-    // Export JSON
-    exportBtn.addEventListener('click', () => {
-      const products = localStorage.getItem(PRODUCTS_KEY) || '[]';
-      const blob = new Blob([products], { type:'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'products.json';
-      a.click();
-      URL.revokeObjectURL(url);
+      list.appendChild(div);
     });
-  </script>
+  }
+</script>
 </body>
 </html>
