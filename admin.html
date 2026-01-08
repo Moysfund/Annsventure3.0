@@ -27,6 +27,7 @@
     .row{grid-column:1/-1}
     footer{margin-top:30px;padding:20px;text-align:center;color:#666;font-size:13px;border-top:1px solid var(--border)}
     footer a{color:var(--rose);text-decoration:none;font-weight:600}
+    #logoutBtn{background:#ff5f9a;color:#fff;border:none;padding:6px 12px;border-radius:8px;cursor:pointer;font-weight:600}
   </style>
 </head>
 <body>
@@ -51,12 +52,15 @@
   </div>
 
   <footer>
-    <a href="index.html">Storefront</a> • <a href="orders.html">Orders</a> • Contact: <a href="mailto:hannahadaja63@gmail.com">hannahadaja63@gmail.com</a>
+    <a href="index.html">Storefront</a> • 
+    <a href="orders.html">Orders</a> • 
+    <button id="logoutBtn">Logout</button>
   </footer>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
   import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDeuEMpCf90Y8P5M0Xahwi_zMeHZeqod-Q",
@@ -70,11 +74,23 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  // Protect page
+  onAuthStateChanged(auth, user=>{
+    if(!user){
+      window.location.href="login.html";
+    }
+  });
+
+  // Logout
+  document.getElementById('logoutBtn').addEventListener('click', ()=>{
+    signOut(auth).then(()=> window.location.href="login.html");
+  });
 
   const form = document.getElementById('productForm');
   const productList = document.getElementById('productList');
-
-  let editId = null; // track if editing
+  let editId = null;
 
   form.addEventListener('submit', async (e)=>{
     e.preventDefault();
@@ -90,13 +106,11 @@
     }
 
     if(editId){
-      // update existing
       const ref = doc(db,"products",editId);
       await updateDoc(ref,{title,price,category,image,description});
       alert("Product updated");
       editId=null;
     } else {
-      // add new
       await addDoc(collection(db, "products"), {
         title, price, category, image, description,
         createdAt: serverTimestamp()
@@ -126,7 +140,6 @@
           <button class="delete">Delete</button>
         </div>
       `;
-      // Edit
       card.querySelector('.edit').addEventListener('click', ()=>{
         document.getElementById('title').value=p.title;
         document.getElementById('price').value=p.price;
@@ -136,7 +149,6 @@
         editId=id;
         window.scrollTo({top:0,behavior:'smooth'});
       });
-      // Delete
       card.querySelector('.delete').addEventListener('click', async ()=>{
         if(confirm("Delete this product?")){
           await deleteDoc(doc(db,"products",id));
