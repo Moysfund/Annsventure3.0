@@ -1,0 +1,58 @@
+:root{
+  --pink:#ffb6d5;
+  --pink-2:#ffd6e8;
+  --accent:#ff6fa3;
+  --muted:#6b6b6b;
+  --card:#fff;
+  --radius:14px;
+  --container:1100px;
+}
+
+*{box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;margin:0;background:linear-gradient(180deg,var(--pink-2),#fff);color:#222}
+.container{max-width:var(--container);margin:0 auto;padding:20px}
+.pink-bg{background:linear-gradient(180deg,#fff, #fff)}
+
+.intro{
+  position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(135deg, rgba(255,182,213,0.95), rgba(255,214,233,0.95));
+  z-index:9999;backdrop-filter: blur(2px);transition:opacity .6s ease, transform .6s ease;
+}
+.intro-logo{width:120px;height:120px;object-fit:contain;border-radius:20px;box-shadow:0 8px 30px rgba(0,0,0,0.12)}
+.brand-title{font-family:'Playfair Display',serif;font-size:36px;margin:12px 0;color:#fff;letter-spacing:2px}
+.tagline{color:#fff;opacity:.95}
+
+.site-header{position:sticky;top:0;background:transparent;padding:12px 0}
+.header-inner{display:flex;align-items:center;justify-content:space-between}
+.logo-small{height:48px}
+nav a{margin-left:18px;color:#333;text-decoration:none;font-weight:600}
+.admin-link{background:linear-gradient(90deg,var(--accent),#ff8ab0);padding:8px 12px;border-radius:10px;color:#fff}
+
+.products-section{margin:36px 0}
+.products-section h2{font-family:'Playfair Display',serif;color:#333}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+
+.card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06);text-align:center}
+.card img{width:100%;height:220px;object-fit:cover;border-radius:10px}
+.card h3{margin:10px 0 6px;font-size:18px}
+.card p{margin:0;color:var(--muted)}
+.price{font-weight:700;color:var(--accent);margin-top:8px}
+
+.site-footer{text-align:center;padding:24px;color:var(--muted)}
+
+.admin-container{display:flex;align-items:center;justify-content:center;height:100vh}
+.admin-card{width:100%;max-width:720px;background:var(--card);padding:28px;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.08)}
+.form label{display:block;margin:10px 0;font-size:14px}
+.form input[type="text"], .form input[type="password"], .form input[type="number"], .form select{width:100%;padding:10px;border-radius:8px;border:1px solid #eee}
+.btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid #eee}
+.form-row{display:flex;gap:10px;margin-top:12px}
+.preview-area img{max-width:160px;border-radius:10px;margin-top:8px}
+.hidden{display:none}
+.small{font-size:12px}
+.muted{color:var(--muted)}
+.product-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.product-item{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;border:1px solid #f3f3f3}
+.product-item img{width:72px;height:72px;object-fit:cover;border-radius:8px}
+.product-item .meta{flex:1}
+.product-item .actions button{margin-left:6px}
