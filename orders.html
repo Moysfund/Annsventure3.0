@@ -3,55 +3,49 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin — Orders</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Ann’s Ventures — Orders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(180deg,#fff,#ffd6e8 60%,#fff);color:#2a2a2a}
-    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
-    .card{background:#fff;border-radius:20px;box-shadow:0 14px 40px rgba(255,95,154,.18);padding:20px;width:100%;max-width:1000px}
-    .title{font-family:'Playfair Display',serif;color:#7a2a56;margin:0 0 6px}
-    .btn{padding:8px 12px;border:none;border-radius:12px;background:linear-gradient(90deg,#ff5f9a,#ff84b2);color:#fff;font-weight:600;cursor:pointer}
-    .btn.ghost{background:#fff;color:#7a2a56;border:1px solid #f3a6c6}
-    .list{margin-top:14px;display:flex;flex-direction:column;gap:12px}
-    .order{border:1px solid #f4c2d8;border-radius:14px;padding:12px;background:#fff}
-    .order h3{margin:0;color:#7a2a56}
-    .order .meta{font-size:14px;color:#444;margin-top:6px}
-    .order-items{margin-top:10px;padding-left:20px}
-    .order-items li{margin-bottom:4px}
-    .total{font-weight:700;color:#ff5f9a;margin-top:8px}
+    :root{--pink:#ff5f9a; --rose:#7a2a56; --border:#f4c2d8;}
+    body{margin:0;font-family:'Poppins',sans-serif;color:#2a2a2a}
+    header{background:var(--pink);color:#fff;text-align:center;padding:12px;font-weight:600}
+    .wrap{max-width:1000px;margin:0 auto;padding:16px}
+    h1{font-family:'Playfair Display',serif;color:var(--rose);margin:10px 0 16px}
+    .order{border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px;background:#fff}
+    .order h3{margin:0 0 8px;color:var(--rose);display:flex;align-items:center;gap:10px}
+    .badge{padding:4px 8px;border-radius:6px;font-size:12px;font-weight:600;color:#fff}
+    .badge.pending{background:#f0ad4e}
+    .badge.shipped{background:#5bc0de}
+    .badge.completed{background:#5cb85c}
+    .order .row{display:flex;gap:12px;flex-wrap:wrap;font-size:14px;color:#444}
+    .items{margin-top:8px;font-size:14px}
+    .item{padding:4px 0;border-bottom:1px dashed #f3d0de}
+    .item:last-child{border-bottom:none}
+    .total{font-weight:700;color:var(--pink);margin-top:8px}
+    .actions{margin-top:10px;display:flex;gap:10px}
+    .delete{padding:6px 12px;border:none;border-radius:8px;background:#a33;color:#fff;font-weight:600;cursor:pointer}
+    .status{padding:6px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit}
+    .empty{color:#7a2a56;text-align:center;padding:20px}
+    footer{margin-top:30px;padding:20px;text-align:center;color:#666;font-size:13px;border-top:1px solid var(--border)}
+    footer a{color:var(--rose);text-decoration:none;font-weight:600}
   </style>
 </head>
 <body>
+  <header>Ann’s Ventures — Orders</header>
   <div class="wrap">
-    <div class="card">
-      <div class="title">Admin — Orders</div>
-
-      <!-- Login -->
-      <section id="login-section">
-        <label>Email</label>
-        <input id="email" type="email" placeholder="admin@anns.com" />
-        <label>Password</label>
-        <input id="password" type="password" placeholder="••••••••" />
-        <button id="loginBtn" class="btn">Sign in</button>
-      </section>
-
-      <!-- Orders area -->
-      <section id="orders-section" style="display:none; margin-top:16px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h2 class="title" style="margin:0">Incoming Orders</h2>
-          <button id="logoutBtn" class="btn ghost">Logout</button>
-        </div>
-        <div class="list" id="ordersList"></div>
-      </section>
-    </div>
+    <h1>Incoming orders</h1>
+    <div id="orders"></div>
+    <div id="no-orders" class="empty" style="display:none">No orders yet.</div>
   </div>
+
+  <footer>
+    <a href="index.html">Storefront</a> • <a href="admin.html">Product admin</a> • Contact: <a href="mailto:hannahadaja63@gmail.com">hannahadaja63@gmail.com</a>
+  </footer>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-  import { getFirestore, collection, onSnapshot, orderBy, query } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getFirestore, collection, onSnapshot, query, orderBy, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-  // Firebase config (same as admin.html)
   const firebaseConfig = {
     apiKey: "AIzaSyDeuEMpCf90Y8P5M0Xahwi_zMeHZeqod-Q",
     authDomain: "annsventure-51957.firebaseapp.com",
@@ -63,50 +57,61 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
   const db = getFirestore(app);
 
-  const loginSection=document.getElementById('login-section');
-  const ordersSection=document.getElementById('orders-section');
-  const emailEl=document.getElementById('email');
-  const passwordEl=document.getElementById('password');
-  const loginBtn=document.getElementById('loginBtn');
-  const logoutBtn=document.getElementById('logoutBtn');
-  const ordersList=document.getElementById('ordersList');
+  const ordersEl = document.getElementById('orders');
+  const emptyEl = document.getElementById('no-orders');
 
-  onAuthStateChanged(auth,(user)=>{
-    if(user){ loginSection.style.display='none'; ordersSection.style.display='block'; loadOrders(); }
-    else { ordersSection.style.display='none'; loginSection.style.display='block'; }
-  });
-
-  loginBtn.addEventListener('click',()=>{
-    signInWithEmailAndPassword(auth,emailEl.value,passwordEl.value)
-      .catch(err=>alert("Login failed: "+err.message));
-  });
-
-  logoutBtn.addEventListener('click',()=>{ signOut(auth); });
-
-  function loadOrders(){
-    const q=query(collection(db,"orders"), orderBy("createdAt","desc"));
-    onSnapshot(q,(snapshot)=>{
-      ordersList.innerHTML='';
-      snapshot.forEach(docSnap=>{
-        const o=docSnap.data();
-        const div=document.createElement('div');
-        div.className='order';
-        div.innerHTML=`
-          <h3>Order by ${o.customer.name||''}</h3>
-          <div class="meta">Email: ${o.customer.email||''} | Phone: ${o.customer.phone||''}</div>
-          <div class="meta">Address: ${o.customer.address||''}</div>
-          <ul class="order-items">
-            ${(o.items||[]).map(i=>`<li>${i.title} — ₦${i.price}</li>`).join('')}
-          </ul>
-          <div class="total">Total: ₦${o.total||0}</div>
-        `;
-        ordersList.appendChild(div);
+  const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+  onSnapshot(q, (snapshot)=>{
+    ordersEl.innerHTML='';
+    let count = 0;
+    snapshot.forEach(docSnap=>{
+      count++;
+      const o = docSnap.data();
+      const id = docSnap.id;
+      const status = o.status || "Pending";
+      const badgeClass = status.toLowerCase();
+      const itemsList = (o.items||[]).map(i=>`<div class="item">${i.title} — ₦${i.price}</div>`).join('');
+      const created = o.createdAt?.toDate ? o.createdAt.toDate().toLocaleString() : '';
+      const card = document.createElement('div');
+      card.className = 'order';
+      card.innerHTML = `
+        <h3>Order <span class="badge ${badgeClass}">${status}</span></h3>
+        <div class="row">
+          <div><strong>Name:</strong> ${o.customer?.name||''}</div>
+          <div><strong>Email:</strong> ${o.customer?.email||''}</div>
+          <div><strong>Phone:</strong> ${o.customer?.phone||''}</div>
+        </div>
+        <div class="row">
+          <div><strong>Address:</strong> ${o.customer?.address||''}</div>
+          <div><strong>Date:</strong> ${created}</div>
+        </div>
+        <div class="items">${itemsList}</div>
+        <div class="total">Total: ₦${o.total||0}</div>
+        <div class="actions">
+          <select class="status">
+            <option value="Pending" ${status==="Pending"?"selected":""}>Pending</option>
+            <option value="Shipped" ${status==="Shipped"?"selected":""}>Shipped</option>
+            <option value="Completed" ${status==="Completed"?"selected":""}>Completed</option>
+          </select>
+          <button class="delete">Delete</button>
+        </div>
+      `;
+      // Status change
+      card.querySelector('.status').addEventListener('change', async (e)=>{
+        await updateDoc(doc(db,"orders",id), { status: e.target.value });
       });
+      // Delete
+      card.querySelector('.delete').addEventListener('click', async ()=>{
+        if(confirm("Delete this order?")){
+          await deleteDoc(doc(db,"orders",id));
+        }
+      });
+      ordersEl.appendChild(card);
     });
-  }
+    emptyEl.style.display = count === 0 ? 'block' : 'none';
+  });
 </script>
 </body>
 </html>
