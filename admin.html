@@ -3,104 +3,57 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin — Ann’s Ventures</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Ann’s Ventures — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(180deg,#fff,#ffd6e8 60%,#fff);color:#2a2a2a}
-    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
-    .card{background:#fff;border-radius:20px;box-shadow:0 14px 40px rgba(255,95,154,.18);padding:20px;width:100%;max-width:900px}
-    .title{font-family:'Playfair Display',serif;color:#7a2a56;margin:0 0 6px}
-    input,select,textarea,button{font-family:inherit}
-    input,select,textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #f1c1d7;background:#fff}
-    textarea{min-height:80px;resize:vertical}
-    .btn{padding:10px 14px;border:none;border-radius:12px;background:linear-gradient(90deg,#ff5f9a,#ff84b2);color:#fff;font-weight:600;cursor:pointer}
-    .btn.ghost{background:#fff;color:#7a2a56;border:1px solid #f3a6c6}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .list{margin-top:14px;display:flex;flex-direction:column;gap:10px}
-    .item{display:flex;gap:12px;align-items:flex-start;border:1px solid #f4c2d8;border-radius:14px;padding:10px;background:#fff}
-    .item img{width:72px;height:72px;border-radius:12px;object-fit:cover}
-    .item .meta{flex:1}
-    .pill{background:#ffe4ef;border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64}
-    .price{font-weight:700;color:#ff5f9a}
-    .desc{margin-top:4px;font-size:13px;color:#444}
-    .hint{font-size:12px;color:#7a2a56;margin-top:6px}
+    :root{--pink:#ff5f9a; --rose:#7a2a56; --border:#f4c2d8; --pill:#ffe4ef;}
+    body{margin:0;font-family:'Poppins',sans-serif;color:#2a2a2a}
+    header{background:var(--pink);color:#fff;text-align:center;padding:12px;font-weight:600}
+    .wrap{max-width:1000px;margin:0 auto;padding:16px}
+    h1{font-family:'Playfair Display',serif;color:var(--rose);margin:10px 0 16px}
+    form{display:grid;grid-template-columns:1fr 1fr;gap:12px;border:1px solid var(--border);padding:12px;border-radius:12px}
+    form input, form select, form textarea{padding:10px;border:1px solid var(--border);border-radius:8px}
+    form button{padding:10px;border:none;border-radius:10px;background:var(--pink);color:#fff;font-weight:600;cursor:pointer}
+    .list{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+    .item{border:1px solid var(--border);border-radius:12px;padding:10px}
+    .item img{width:100%;height:150px;object-fit:cover;border-radius:10px}
+    .item h3{margin:8px 0 4px;color:var(--rose);font-size:16px}
+    .item .meta{font-size:13px;color:#666}
+    .item .price{font-weight:700;color:var(--pink);margin-top:6px}
+    .row{grid-column:1/-1}
+    footer{margin-top:30px;padding:20px;text-align:center;color:#666;font-size:13px;border-top:1px solid var(--border)}
+    footer a{color:var(--rose);text-decoration:none;font-weight:600}
   </style>
 </head>
 <body>
+  <header>Ann’s Ventures — Admin</header>
   <div class="wrap">
-    <div class="card">
-      <div class="title">Admin — Ann’s Ventures</div>
+    <h1>Manage products</h1>
 
-      <!-- Login -->
-      <section id="login-section">
-        <div class="grid-2">
-          <div>
-            <label>Email</label>
-            <input id="email" type="email" placeholder="admin@anns.com" />
-          </div>
-          <div>
-            <label>Password</label>
-            <input id="password" type="password" placeholder="••••••••" />
-          </div>
-        </div>
-        <div class="row" style="margin-top:12px">
-          <button id="loginBtn" class="btn">Sign in</button>
-        </div>
-        <div class="hint">Tip: Add users in Firebase → Authentication → Users.</div>
-      </section>
+    <form id="productForm">
+      <input id="title" type="text" placeholder="Title" required>
+      <input id="price" type="number" placeholder="Price (₦)" step="0.01" required>
+      <select id="category" required>
+        <option value="">Select category</option>
+        <option value="Wear">Wear</option>
+        <option value="Drink">Drink</option>
+      </select>
+      <input id="image" type="url" placeholder="Image URL (https://)" required>
+      <textarea id="description" class="row" placeholder="Description" rows="3" required></textarea>
+      <button type="submit" class="row">Add product</button>
+    </form>
 
-      <!-- Admin area -->
-      <section id="admin-section" style="display:none; margin-top:16px">
-        <div class="row" style="justify-content:space-between;align-items:center">
-          <div class="title" style="margin:0">Product manager</div>
-          <button id="logoutBtn" class="btn ghost">Logout</button>
-        </div>
-
-        <!-- Product form -->
-        <div class="grid-2" style="margin-top:12px">
-          <div>
-            <label>Title</label>
-            <input id="pTitle" type="text" />
-          </div>
-          <div>
-            <label>Category</label>
-            <select id="pCategory">
-              <option value="wear">Wear</option>
-              <option value="drink">Drink</option>
-            </select>
-          </div>
-          <div>
-            <label>Price (NGN)</label>
-            <input id="pPrice" type="number" min="0" step="0.01" />
-          </div>
-          <div>
-            <label>Image</label>
-            <input id="pImageFile" type="file" accept="image/*" />
-          </div>
-        </div>
-        <div style="margin-top:12px">
-          <label>Description</label>
-          <textarea id="pDesc" placeholder="Describe the product: materials, size, taste, etc."></textarea>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <button id="saveBtn" class="btn">Save product</button>
-        </div>
-
-        <!-- Existing products -->
-        <div class="list" id="list"></div>
-      </section>
-    </div>
+    <div class="list" id="productList"></div>
   </div>
+
+  <footer>
+    <a href="index.html">Storefront</a> • <a href="orders.html">Orders</a> • Contact: <a href="mailto:hannahadaja63@gmail.com">hannahadaja63@gmail.com</a>
+  </footer>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-  // Your Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyDeuEMpCf90Y8P5M0Xahwi_zMeHZeqod-Q",
     authDomain: "annsventure-51957.firebaseapp.com",
@@ -112,104 +65,50 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
   const db = getFirestore(app);
-  const storage = getStorage(app);
 
-  // Elements
-  const loginSection=document.getElementById('login-section');
-  const adminSection=document.getElementById('admin-section');
-  const emailEl=document.getElementById('email');
-  const passwordEl=document.getElementById('password');
-  const loginBtn=document.getElementById('loginBtn');
-  const logoutBtn=document.getElementById('logoutBtn');
-  const pTitle=document.getElementById('pTitle');
-  const pCategory=document.getElementById('pCategory');
-  const pPrice=document.getElementById('pPrice');
-  const pImageFile=document.getElementById('pImageFile');
-  const pDesc=document.getElementById('pDesc');
-  const saveBtn=document.getElementById('saveBtn');
-  const list=document.getElementById('list');
+  const form = document.getElementById('productForm');
+  const productList = document.getElementById('productList');
 
-  // Keep UI in sync with auth state
-  onAuthStateChanged(auth,(user)=>{
-    if(user){ loginSection.style.display='none'; adminSection.style.display='block'; renderProducts(); }
-    else { adminSection.style.display='none'; loginSection.style.display='block'; }
-  });
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const title = document.getElementById('title').value.trim();
+    const price = parseFloat(document.getElementById('price').value.trim());
+    const category = document.getElementById('category').value;
+    const image = document.getElementById('image').value.trim();
+    const description = document.getElementById('description').value.trim();
 
-  // Login
-  loginBtn.addEventListener('click',()=>{
-    const email=emailEl.value.trim();
-    const password=passwordEl.value;
-    signInWithEmailAndPassword(auth,email,password)
-      .catch(err=>alert("Login failed: "+err.message));
-  });
+    if(!title || !price || !category || !image || !description){
+      alert("Fill all fields");
+      return;
+    }
 
-  // Logout
-  logoutBtn.addEventListener('click',()=>{
-    signOut(auth);
-  });
-
-  // Save product
-  saveBtn.addEventListener('click',async ()=>{
-    const title=pTitle.value.trim();
-    const category=pCategory.value;
-    const price=pPrice.value;
-    const desc=pDesc.value.trim();
-    const file=pImageFile.files[0];
-
-    if(!title||!price||!file){alert("Fill all fields and select an image");return;}
-
-    // Upload image to Firebase Storage
-    const storageRef=ref(storage,'products/'+Date.now()+'_'+file.name);
-    await uploadBytes(storageRef,file);
-    const imageURL=await getDownloadURL(storageRef);
-
-    // Save product to Firestore
-    await addDoc(collection(db,"products"),{
-      title,
-      category,
-      price,
-      image: imageURL,
-      description: desc,
+    await addDoc(collection(db, "products"), {
+      title, price, category, image, description,
       createdAt: serverTimestamp()
     });
 
-    // Clear form and refresh list
-    pTitle.value=''; pPrice.value=''; pDesc.value=''; pImageFile.value='';
-    renderProducts();
+    form.reset();
+    alert("Product added");
   });
 
-  // Render products
-  async function renderProducts(){
-    list.innerHTML='';
-    const q=query(collection(db,"products"), orderBy("createdAt","desc"));
-    const snapshot=await getDocs(q);
-    if(snapshot.empty){
-      list.innerHTML='<div class="hint">No products yet. Add your first one above.</div>';
-      return;
-    }
-    snapshot.forEach(d=>{
-      const p=d.data();
-      const div=document.createElement('div');
-      div.className='item';
-      div.innerHTML=`
-        <img src="${p.image||'assets/placeholder.jpg'}" alt="">
-        <div class="meta">
-          <div style="font-weight:600;color:#7a2a56">${p.title||''}</div>
-          <div class="pill">${p.category||''}</div>
-          <div class="price">₦${p.price||0}</div>
-          <div class="desc">${p.description||''}</div>
-        </div>
-        <button class="btn ghost" data-id="${d.id}">Delete</button>
+  const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+  onSnapshot(q, (snapshot)=>{
+    productList.innerHTML='';
+    snapshot.forEach(docSnap=>{
+      const p=docSnap.data();
+      const card=document.createElement('div');
+      card.className='item';
+      card.innerHTML=`
+        <img src="${p.image||''}" alt="${p.title||''}">
+        <h3>${p.title||''}</h3>
+        <div class="meta">${p.category||''}</div>
+        <div class="price">₦${p.price||0}</div>
+        <div class="meta">${p.description||''}</div>
       `;
-      div.querySelector('button').addEventListener('click', async ()=>{
-        await deleteDoc(doc(db,"products",d.id));
-        renderProducts();
-      });
-      list.appendChild(div);
+      productList.appendChild(card);
     });
-  }
+  });
 </script>
 </body>
 </html>
