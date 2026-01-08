@@ -1,4 +1,4 @@
-<<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -10,8 +10,9 @@
     .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
     .card{background:#fff;border-radius:20px;box-shadow:0 14px 40px rgba(255,95,154,.18);padding:20px;width:100%;max-width:900px}
     .title{font-family:'Playfair Display',serif;color:#7a2a56;margin:0 0 6px}
-    input,select,button{font-family:inherit}
-    input,select{width:100%;padding:10px;border-radius:12px;border:1px solid #f1c1d7;background:#fff}
+    input,select,textarea,button{font-family:inherit}
+    input,select,textarea{width:100%;padding:10px;border-radius:12px;border:1px solid #f1c1d7;background:#fff}
+    textarea{min-height:80px;resize:vertical}
     .btn{padding:10px 14px;border:none;border-radius:12px;background:linear-gradient(90deg,#ff5f9a,#ff84b2);color:#fff;font-weight:600;cursor:pointer}
     .btn.ghost{background:#fff;color:#7a2a56;border:1px solid #f3a6c6}
     .row{display:flex;gap:10px;flex-wrap:wrap}
@@ -22,6 +23,8 @@
     .item .meta{flex:1}
     .pill{background:#ffe4ef;border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64}
     .price{font-weight:700;color:#ff5f9a}
+    .desc{margin-top:4px;font-size:13px;color:#444}
+    .hint{font-size:12px;color:#7a2a56;margin-top:6px}
   </style>
 </head>
 <body>
@@ -44,6 +47,7 @@
         <div class="row" style="margin-top:12px">
           <button id="loginBtn" class="btn">Sign in</button>
         </div>
+        <div class="hint">Tip: Add users in Firebase → Authentication → Users.</div>
       </section>
 
       <!-- Admin area -->
@@ -71,9 +75,13 @@
             <input id="pPrice" type="number" min="0" step="0.01" />
           </div>
           <div>
-            <label>Image URL</label>
-            <input id="pImage" type="text" placeholder="https://..." />
+            <label>Image</label>
+            <input id="pImageFile" type="file" accept="image/*" />
           </div>
+        </div>
+        <div style="margin-top:12px">
+          <label>Description</label>
+          <textarea id="pDesc" placeholder="Describe the product: materials, size, taste, etc."></textarea>
         </div>
 
         <div class="row" style="margin-top:12px">
@@ -88,15 +96,16 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-storage.js";
 
   // Your Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyDeuEMpCf90Y8P5M0Xahwi_zMeHZeqod-Q",
     authDomain: "annsventure-51957.firebaseapp.com",
     projectId: "annsventure-51957",
-    storageBucket: "annsventure-51957.firebasestorage.app",
+    storageBucket: "annsventure-51957.appspot.com",
     messagingSenderId: "1054919145056",
     appId: "1:1054919145056:web:64c35fc1507000984b3505",
     measurementId: "G-SSN8TYCRWQ"
@@ -105,6 +114,7 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
+  const storage = getStorage(app);
 
   // Elements
   const loginSection=document.getElementById('login-section');
@@ -116,23 +126,28 @@
   const pTitle=document.getElementById('pTitle');
   const pCategory=document.getElementById('pCategory');
   const pPrice=document.getElementById('pPrice');
-  const pImage=document.getElementById('pImage');
+  const pImageFile=document.getElementById('pImageFile');
+  const pDesc=document.getElementById('pDesc');
   const saveBtn=document.getElementById('saveBtn');
   const list=document.getElementById('list');
 
+  // Keep UI in sync with auth state
+  onAuthStateChanged(auth,(user)=>{
+    if(user){ loginSection.style.display='none'; adminSection.style.display='block'; renderProducts(); }
+    else { adminSection.style.display='none'; loginSection.style.display='block'; }
+  });
+
   // Login
   loginBtn.addEventListener('click',()=>{
-    signInWithEmailAndPassword(auth,emailEl.value,passwordEl.value)
-      .then(()=>{ loginSection.style.display='none'; adminSection.style.display='block'; renderProducts(); })
+    const email=emailEl.value.trim();
+    const password=passwordEl.value;
+    signInWithEmailAndPassword(auth,email,password)
       .catch(err=>alert("Login failed: "+err.message));
   });
 
   // Logout
   logoutBtn.addEventListener('click',()=>{
-    signOut(auth).then(()=>{
-      adminSection.style.display='none';
-      loginSection.style.display='block';
-    });
+    signOut(auth);
   });
 
   // Save product
@@ -140,23 +155,55 @@
     const title=pTitle.value.trim();
     const category=pCategory.value;
     const price=pPrice.value;
-    const image=pImage.value.trim();
-    if(!title||!price){alert("Fill all fields");return;}
-    await addDoc(collection(db,"products"),{title,category,price,image});
-    pTitle.value='';pPrice.value='';pImage.value='';
+    const desc=pDesc.value.trim();
+    const file=pImageFile.files[0];
+
+    if(!title||!price||!file){alert("Fill all fields and select an image");return;}
+
+    // Upload image to Firebase Storage
+    const storageRef=ref(storage,'products/'+Date.now()+'_'+file.name);
+    await uploadBytes(storageRef,file);
+    const imageURL=await getDownloadURL(storageRef);
+
+    // Save product to Firestore
+    await addDoc(collection(db,"products"),{
+      title,
+      category,
+      price,
+      image: imageURL,
+      description: desc,
+      createdAt: serverTimestamp()
+    });
+
+    // Clear form and refresh list
+    pTitle.value=''; pPrice.value=''; pDesc.value=''; pImageFile.value='';
     renderProducts();
   });
 
   // Render products
   async function renderProducts(){
     list.innerHTML='';
-    const snapshot=await getDocs(collection(db,"products"));
+    const q=query(collection(db,"products"), orderBy("createdAt","desc"));
+    const snapshot=await getDocs(q);
+    if(snapshot.empty){
+      list.innerHTML='<div class="hint">No products yet. Add your first one above.</div>';
+      return;
+    }
     snapshot.forEach(d=>{
       const p=d.data();
       const div=document.createElement('div');
       div.className='item';
-      div.innerHTML=`<img src="${p.image||'assets/placeholder.jpg'}"><div class="meta"><div style="font-weight:600;color:#7a2a56">${p.title}</div><div class="pill">${p.category}</div><div class="price">₦${p.price}</div></div><button class="btn ghost" data-id="${d.id}">Delete</button>`;
-      div.querySelector('button').addEventListener('click',async ()=>{
+      div.innerHTML=`
+        <img src="${p.image||'assets/placeholder.jpg'}" alt="">
+        <div class="meta">
+          <div style="font-weight:600;color:#7a2a56">${p.title||''}</div>
+          <div class="pill">${p.category||''}</div>
+          <div class="price">₦${p.price||0}</div>
+          <div class="desc">${p.description||''}</div>
+        </div>
+        <button class="btn ghost" data-id="${d.id}">Delete</button>
+      `;
+      div.querySelector('button').addEventListener('click', async ()=>{
         await deleteDoc(doc(db,"products",d.id));
         renderProducts();
       });
