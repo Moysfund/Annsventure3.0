@@ -6,7 +6,7 @@
   <title>Ann’s Ventures — Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root{--pink:#ff5f9a; --rose:#7a2a56; --border:#f4c2d8; --pill:#ffe4ef;}
+    :root{--pink:#ff5f9a; --rose:#7a2a56; --border:#f4c2d8;}
     body{margin:0;font-family:'Poppins',sans-serif;color:#2a2a2a}
     header{background:var(--pink);color:#fff;text-align:center;padding:12px;font-weight:600}
     .wrap{max-width:1000px;margin:0 auto;padding:16px}
@@ -15,11 +15,15 @@
     form input, form select, form textarea{padding:10px;border:1px solid var(--border);border-radius:8px}
     form button{padding:10px;border:none;border-radius:10px;background:var(--pink);color:#fff;font-weight:600;cursor:pointer}
     .list{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-    .item{border:1px solid var(--border);border-radius:12px;padding:10px}
+    .item{border:1px solid var(--border);border-radius:12px;padding:10px;background:#fff}
     .item img{width:100%;height:150px;object-fit:cover;border-radius:10px}
     .item h3{margin:8px 0 4px;color:var(--rose);font-size:16px}
     .item .meta{font-size:13px;color:#666}
     .item .price{font-weight:700;color:var(--pink);margin-top:6px}
+    .actions{margin-top:8px;display:flex;gap:8px}
+    .actions button{flex:1;padding:6px;border:none;border-radius:8px;cursor:pointer;font-weight:600}
+    .edit{background:#ffe4ef;color:#7a2a56}
+    .delete{background:#a33;color:#fff}
     .row{grid-column:1/-1}
     footer{margin-top:30px;padding:20px;text-align:center;color:#666;font-size:13px;border-top:1px solid var(--border)}
     footer a{color:var(--rose);text-decoration:none;font-weight:600}
@@ -40,7 +44,7 @@
       </select>
       <input id="image" type="url" placeholder="Image URL (https://)" required>
       <textarea id="description" class="row" placeholder="Description" rows="3" required></textarea>
-      <button type="submit" class="row">Add product</button>
+      <button type="submit" class="row">Save product</button>
     </form>
 
     <div class="list" id="productList"></div>
@@ -52,7 +56,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDeuEMpCf90Y8P5M0Xahwi_zMeHZeqod-Q",
@@ -70,6 +74,8 @@
   const form = document.getElementById('productForm');
   const productList = document.getElementById('productList');
 
+  let editId = null; // track if editing
+
   form.addEventListener('submit', async (e)=>{
     e.preventDefault();
     const title = document.getElementById('title').value.trim();
@@ -83,13 +89,22 @@
       return;
     }
 
-    await addDoc(collection(db, "products"), {
-      title, price, category, image, description,
-      createdAt: serverTimestamp()
-    });
+    if(editId){
+      // update existing
+      const ref = doc(db,"products",editId);
+      await updateDoc(ref,{title,price,category,image,description});
+      alert("Product updated");
+      editId=null;
+    } else {
+      // add new
+      await addDoc(collection(db, "products"), {
+        title, price, category, image, description,
+        createdAt: serverTimestamp()
+      });
+      alert("Product added");
+    }
 
     form.reset();
-    alert("Product added");
   });
 
   const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
@@ -97,6 +112,7 @@
     productList.innerHTML='';
     snapshot.forEach(docSnap=>{
       const p=docSnap.data();
+      const id=docSnap.id;
       const card=document.createElement('div');
       card.className='item';
       card.innerHTML=`
@@ -105,7 +121,27 @@
         <div class="meta">${p.category||''}</div>
         <div class="price">₦${p.price||0}</div>
         <div class="meta">${p.description||''}</div>
+        <div class="actions">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
       `;
+      // Edit
+      card.querySelector('.edit').addEventListener('click', ()=>{
+        document.getElementById('title').value=p.title;
+        document.getElementById('price').value=p.price;
+        document.getElementById('category').value=p.category;
+        document.getElementById('image').value=p.image;
+        document.getElementById('description').value=p.description;
+        editId=id;
+        window.scrollTo({top:0,behavior:'smooth'});
+      });
+      // Delete
+      card.querySelector('.delete').addEventListener('click', async ()=>{
+        if(confirm("Delete this product?")){
+          await deleteDoc(doc(db,"products",id));
+        }
+      });
       productList.appendChild(card);
     });
   });
