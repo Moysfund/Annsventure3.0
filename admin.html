@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>ANN'S VENTURES — Admin</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --pink-1:#ffe4ef; --pink-2:#ffd6e8; --accent:#ff5f9a; --accent-2:#ff84b2;
+      --dark:#2a2a2a; --muted:#6b6b6b; --card:#fff; --shadow:0 14px 40px rgba(255,95,154,.18);
+      --radius:18px; --container:980px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Poppins',sans-serif;color:var(--dark);
+      background:linear-gradient(180deg,#fff,var(--pink-2) 50%,#fff)}
+    .container{max-width:var(--container);margin:0 auto;padding:20px}
+
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:24px;width:100%;max-width:840px}
+    .logo{height:54px;border-radius:14px;border:5px solid var(--pink-2)}
+    .title{font-family:'Playfair Display',serif;color:#7a2a56;margin:8px 0 2px}
+    .muted{color:var(--muted)}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .grid-1{display:grid;grid-template-columns:1fr;gap:12px}
+    label{font-size:13px;color:#7a2a56;font-weight:600}
+    input,select,button{font-family:inherit}
+    input[type="text"],input[type="password"],input[type="number"],select{
+      width:100%;padding:11px;border-radius:12px;border:1px solid #f1c1d7;background:#fff
+    }
+    .btn{padding:11px 14px;border:none;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;font-weight:600;cursor:pointer}
+    .btn.ghost{background:#fff;color:#7a2a56;border:1px solid #f3a6c6}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+
+    .list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+    .item{display:flex;gap:12px;align-items:center;border:1px solid #f4c2d8;border-radius:14px;padding:10px;background:#fff}
+    .item img{width:72px;height:72px;border-radius:12px;object-fit:cover}
+    .item .meta{flex:1}
+    .pill{background:linear-gradient(90deg,#fff,var(--pink-1));border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64}
+    .price{font-weight:700;color:var(--accent)}
+
+    .preview{margin-top:8px}
+    .preview img{max-width:160px;border-radius:12px;border:1px solid #f6cfe0}
+
+    @media (max-width:740px){ .grid-2{grid-template-columns:1fr} .row{flex-direction:column} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <img src="assets/logo.png" alt="logo" class="logo" />
+        <div>
+          <div class="title">Admin — Ann’s Ventures</div>
+          <div class="muted">Secure login • Add, edit, delete products • Image uploads with preview</div>
+        </div>
+      </div>
+
+      <!-- Login -->
+      <section id="login-section">
+        <div class="grid-2">
+          <div class="grid-1">
+            <label>Username</label>
+            <input id="username" type="text" placeholder="admin" />
+          </div>
+          <div class="grid-1">
+            <label>Password</label>
+            <input id="password" type="password" placeholder="••••••••" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button id="loginBtn" class="btn">Sign in</button>
+          <button id="setPassBtn" class="btn ghost" title="Set or change password">Set/Change password</button>
+        </div>
+        <p class="muted" style="margin-top:8px">Default user: <strong>admin</strong>. If first time, click “Set/Change password”.</p>
+      </section>
+
+      <!-- Admin area -->
+      <section id="admin-section" style="display:none">
+        <div class="row" style="justify-content:space-between">
+          <div class="title" style="margin:0">Product manager</div>
+          <div class="row">
+            <button id="exportBtn" class="btn ghost">Export JSON</button>
+            <button id="logoutBtn" class="btn ghost">Logout</button>
+          </div>
+        </div>
+
+        <!-- Product form -->
+        <div class="grid-2" style="margin-top:12px">
+          <div class="grid-1">
+            <label>Title</label>
+            <input id="pTitle" type="text" placeholder="e.g., Floral midi dress" />
+          </div>
+          <div class="grid-1">
+            <label>Category</label>
+            <select id="pCategory">
+              <option value="wear">Wear</option>
+              <option value="drink">Drink</option>
+            </select>
+          </div>
+          <div class="grid-1">
+            <label>Price (NGN)</label>
+            <input id="pPrice" type="number" min="0" step="0.01" placeholder="5000" />
+          </div>
+          <div class="grid-1">
+            <label>Image</label>
+            <input id="pImage" type="file" accept="image/*" />
+          </div>
+        </div>
+
+        <div id="preview" class="preview" style="display:none">
+          <label>Preview</label>
+          <div><img id="previewImg" alt="preview" /></div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <button id="saveBtn" class="btn">Save product</button>
+          <button id="clearBtn" class="btn ghost" type="button">Clear</button>
+        </div>
+
+        <!-- Existing products -->
+        <div class="list" id="list"></div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const PRODUCTS_KEY = 'av_products';
+    const PASS_KEY = 'av_admin_pass_hash';
+    const USERNAME = 'admin';
+
+    const loginSection = document.getElementById('login-section');
+    const adminSection = document.getElementById('admin-section');
+    const usernameEl = document.getElementById('username');
+    const passwordEl = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const setPassBtn = document.getElementById('setPassBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const exportBtn = document.getElementById('exportBtn');
+
+    const pTitle = document.getElementById('pTitle');
+    const pCategory = document.getElementById('pCategory');
+    const pPrice = document.getElementById('pPrice');
+    const pImage = document.getElementById('pImage');
+    const preview = document.getElementById('preview');
+    const previewImg = document.getElementById('previewImg');
+    const saveBtn = document.getElementById('saveBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const list = document.getElementById('list');
+
+    let editingId = null;
+    let currentImageData = null;
+
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function loadProducts(){ try { return JSON.parse(localStorage
