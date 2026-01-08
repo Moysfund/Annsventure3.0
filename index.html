@@ -1,125 +1,72 @@
-here<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin — Ann’s Ventures</title>
+  <title>Ann’s Ventures — Boutique</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(180deg,#fff,#ffd6e8 50%,#fff);color:#2a2a2a}
-    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center}
-    .card{background:#fff;border-radius:20px;box-shadow:0 14px 40px rgba(255,95,154,.18);padding:24px;width:100%;max-width:840px}
-    .title{font-family:'Playfair Display',serif;color:#7a2a56;margin:8px 0}
-    .muted{color:#6b6b6b}
-    input,select,button{font-family:inherit}
-    input,select{width:100%;padding:10px;border-radius:12px;border:1px solid #f1c1d7}
-    .btn{padding:10px 14px;border:none;border-radius:12px;background:linear-gradient(90deg,#ff5f9a,#ff84b2);color:#fff;font-weight:600;cursor:pointer}
-    .btn.ghost{background:#fff;color:#7a2a56;border:1px solid #f3a6c6}
-    .list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
-    .item{display:flex;gap:12px;align-items:center;border:1px solid #f4c2d8;border-radius:14px;padding:10px;background:#fff}
-    .item img{width:72px;height:72px;border-radius:12px;object-fit:cover}
-    .item .meta{flex:1}
+    body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(180deg,#fff,#ffd6e8 60%,#fff);color:#2a2a2a}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    .nav{display:flex;justify-content:space-between;align-items:center}
+    .brand{font-family:'Playfair Display',serif;font-size:24px;color:#7a2a56}
+    .cart-btn{background:#fff;border:1px solid #f3a6c6;border-radius:12px;padding:8px 12px;cursor:pointer}
+    .hero{margin:20px 0;padding:28px;border-radius:20px;background:linear-gradient(135deg,#fff,#ffeef6,#ffd6e8);display:flex;gap:20px;align-items:center}
+    .hero h1{font-family:'Playfair Display',serif;color:#7a2a56;margin:0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .card{background:#fff;border:1px solid #f4c2d8;border-radius:16px;overflow:hidden;box-shadow:0 10px 26px rgba(255,95,154,.12)}
+    .card img{width:100%;height:180px;object-fit:cover}
+    .card .body{padding:12px}
+    .card .title{font-weight:600;color:#7a2a56}
+    .card .meta{display:flex;justify-content:space-between;margin-top:6px}
+    .pill{background:#ffe4ef;border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64}
     .price{font-weight:700;color:#ff5f9a}
+    .btn{margin-top:10px;padding:8px 12px;border:none;border-radius:12px;background:linear-gradient(90deg,#ff5f9a,#ff84b2);color:#fff;font-weight:600;cursor:pointer}
+    .footer{text-align:center;margin:30px 0;color:#7a2a56}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="title">Admin — Ann’s Ventures</div>
-      <div class="muted">Secure login • Manage products • Export backup</div>
+  <header class="container nav">
+    <div class="brand">Ann’s Ventures</div>
+    <button id="cartToggle" class="cart-btn">Cart (<span id="cartCount">0</span>)</button>
+  </header>
 
-      <!-- Login -->
-      <section id="login-section">
-        <input id="username" type="text" placeholder="admin" />
-        <input id="password" type="password" placeholder="••••••••" />
-        <button id="loginBtn" class="btn">Sign in</button>
-        <button id="setPassBtn" class="btn ghost">Set/Change password</button>
-        <p class="muted">Default user: <strong>admin</strong>. First time? Click “Set/Change password”.</p>
-      </section>
-
-      <!-- Admin area -->
-      <section id="admin-section" style="display:none">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div class="title">Product Manager</div>
-          <div>
-            <button id="exportBtn" class="btn ghost">Export JSON</button>
-            <button id="logoutBtn" class="btn ghost">Logout</button>
-          </div>
-        </div>
-        <input id="pTitle" type="text" placeholder="Product title" />
-        <select id="pCategory"><option value="wear">Wear</option><option value="drink">Drink</option></select>
-        <input id="pPrice" type="number" placeholder="Price (NGN)" />
-        <input id="pImage" type="file" accept="image/*" />
-        <div id="preview" style="display:none"><img id="previewImg" /></div>
-        <button id="saveBtn" class="btn">Save product</button>
-        <div class="list" id="list"></div>
-      </section>
+  <section class="container hero">
+    <div>
+      <h1>Grand Opening — Sweet Styles</h1>
+      <p>Explore curated wears and delightful drinks. Pink vibes, quality picks, and friendly service.</p>
     </div>
-  </div>
+    <img src="assets/hero.jpg" alt="hero" style="width:220px;height:220px;object-fit:cover;border-radius:20px;border:8px solid #ffeaf3">
+  </section>
+
+  <main class="container">
+    <div id="grid" class="grid"></div>
+  </main>
+
+  <footer class="container footer">
+    © <span id="year"></span> Ann’s Ventures — <a href="admin.html">Admin</a>
+  </footer>
 
 <script>
-const PRODUCTS_KEY='av_products',PASS_KEY='av_admin_pass_hash',USERNAME='admin';
-const loginSection=document.getElementById('login-section'),adminSection=document.getElementById('admin-section');
-const usernameEl=document.getElementById('username'),passwordEl=document.getElementById('password');
-const loginBtn=document.getElementById('loginBtn'),setPassBtn=document.getElementById('setPassBtn');
-const logoutBtn=document.getElementById('logoutBtn'),exportBtn=document.getElementById('exportBtn');
-const pTitle=document.getElementById('pTitle'),pCategory=document.getElementById('pCategory'),pPrice=document.getElementById('pPrice'),pImage=document.getElementById('pImage');
-const preview=document.getElementById('preview'),previewImg=document.getElementById('previewImg'),saveBtn=document.getElementById('saveBtn'),list=document.getElementById('list');
-let currentImageData=null;
+const PRODUCTS_KEY='av_products';
+let products=[],cart=[];
 
-async function sha256Hex(msg){const buf=new TextEncoder().encode(msg);const hash=await crypto.subtle.digest('SHA-256',buf);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');}
-
-// Hide set button if password exists
-if(localStorage.getItem(PASS_KEY)){setPassBtn.style.display='none';}
-
-setPassBtn.addEventListener('click',async()=>{
-  if(localStorage.getItem(PASS_KEY)){alert('Password already set.');return;}
-  const user=(usernameEl.value||USERNAME).trim();if(user!==USERNAME){alert('Username must be "admin"');return;}
-  const newPass=prompt('Enter new admin password:');if(!newPass)return;
-  const h=await sha256Hex(newPass);localStorage.setItem(PASS_KEY,h);
-  alert('Password saved. Use it to login.');setPassBtn.style.display='none';
-});
-
-loginBtn.addEventListener('click',async()=>{
-  const user=(usernameEl.value||'').trim();const pass=passwordEl.value;
-  if(user!==USERNAME){alert('Invalid username');return;}
-  const stored=localStorage.getItem(PASS_KEY);if(!stored){alert('No password set.');return;}
-  const attempt=await sha256Hex(pass);if(attempt!==stored){alert('Invalid password');return;}
-  loginSection.style.display='none';adminSection.style.display='block';renderProducts();
-});
-
-logoutBtn.addEventListener('click',()=>{adminSection.style.display='none';loginSection.style.display='block';});
-
-pImage.addEventListener('change',()=>{
-  const file=pImage.files[0];if(!file)return;
-  const reader=new FileReader();reader.onload=e=>{currentImageData=e.target.result;previewImg.src=currentImageData;preview.style.display='block';};
-  reader.readAsDataURL(file);
-});
-
-saveBtn.addEventListener('click',()=>{
-  const products=JSON.parse(localStorage.getItem(PRODUCTS_KEY)||'[]');
-  products.push({title:pTitle.value,category:pCategory.value,price:pPrice.value,image:currentImageData});
-  localStorage.setItem(PRODUCTS_KEY,JSON.stringify(products));
-  pTitle.value='';pPrice.value='';pImage.value='';preview.style.display='none';currentImageData=null;
-  renderProducts();
-});
-
-function renderProducts(){
-  const products=JSON.parse(localStorage.getItem(PRODUCTS_KEY)||'[]');
-  list.innerHTML='';products.forEach((p,i)=>{
-    const div=document.createElement('div');div.className='item';
-    div.innerHTML=`<img src="${p.image||''}"><div class="meta"><div>${p.title}</div><div class="pill">${p.category}</div><div class="price">₦${p.price}</div></div>`;
-    list.appendChild(div);
+function loadProducts(){
+  try{products=JSON.parse(localStorage.getItem(PRODUCTS_KEY)||'[]');}catch(e){products=[];}
+}
+function fmtPrice(v){return '₦'+(Number(v)||0).toLocaleString();}
+function render(){
+  const grid=document.getElementById('grid');grid.innerHTML='';
+  if(products.length===0){grid.innerHTML='<p>No products yet. Check back soon!</p>';return;}
+  products.forEach((p,i)=>{
+    const el=document.createElement('div');el.className='card';
+    el.innerHTML=`<img src="${p.image||'assets/placeholder.jpg'}"><div class="body"><div class="title">${p.title}</div><div class="meta"><span class="pill">${p.category}</span><span class="price">${fmtPrice(p.price)}</span></div><button class="btn">Add to cart</button></div>`;
+    el.querySelector('.btn').addEventListener('click',()=>{cart.push(p);document.getElementById('cartCount').textContent=cart.length;});
+    grid.appendChild(el);
   });
 }
-
-exportBtn.addEventListener('click',()=>{
-  const products=localStorage.getItem(PRODUCTS_KEY)||'[]';
-  const blob=new Blob([products],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='products.json';a.click();
-  URL.revokeObjectURL(url);
-});
+document.getElementById('year').textContent=new Date().getFullYear();
+loadProducts();render();
 </script>
 </body>
 </html>
