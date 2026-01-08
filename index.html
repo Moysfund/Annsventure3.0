@@ -100,7 +100,7 @@ document.getElementById('cartToggle').addEventListener('click',()=>{
 document.getElementById('checkout').addEventListener('click',()=>{
   let msg="Hello Ann’s Ventures! I’d like to order:\n";
   cart.forEach(c=>{ msg+=`- ${c.title} (₦${c.price})\n`; });
-  const url="https://wa.me/234?text="+encodeURIComponent(msg);
+  const url="https://wa.me/2349046588565?text="+encodeURIComponent(msg);
   window.open(url,'_blank');
 });
 document.getElementById('year').textContent=new Date().getFullYear();
