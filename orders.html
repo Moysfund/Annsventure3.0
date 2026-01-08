@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Orders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(180deg,#fff,#ffd6e8 60%,#fff);color:#2a2a2a}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+    .card{background:#fff;border-radius:20px;box-shadow:0 14px 40px rgba(255,95,154,.18);padding:20px;width:100%;max-width:1000px}
+    .title{font-family:'Playfair Display',serif;color:#7a2a56;margin:0 0 6px}
+    .btn{padding:8px 12px;border:none;border-radius:12px;background:linear-gradient(90deg,#ff5f9a,#ff84b2);color:#fff;font-weight:600;cursor:pointer}
+    .btn.ghost{background:#fff;color:#7a2a56;border:1px solid #f3a6c6}
+    .list{margin-top:14px;display:flex;flex-direction:column;gap:12px}
+    .order{border:1px solid #f4c2d8;border-radius:14px;padding:12px;background:#fff}
+    .order h3{margin:0;color:#7a2a56}
+    .order .meta{font-size:14px;color:#444;margin-top:6px}
+    .order-items{margin-top:10px;padding-left:20px}
+    .order-items li{margin-bottom:4px}
+    .total{font-weight:700;color:#ff5f9a;margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="title">Admin — Orders</div>
+
+      <!-- Login -->
+      <section id="login-section">
+        <label>Email</label>
+        <input id="email" type="email" placeholder="admin@anns.com" />
+        <label>Password</label>
+        <input id="password" type="password" placeholder="••••••••" />
+        <button id="loginBtn" class="btn">Sign in</button>
+      </section>
+
+      <!-- Orders area -->
+      <section id="orders-section" style="display:none; margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h2 class="title" style="margin:0">Incoming Orders</h2>
+          <button id="logoutBtn" class="btn ghost">Logout</button>
+        </div>
+        <div class="list" id="ordersList"></div>
+      </section>
+    </div>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+  import { getFirestore, collection, onSnapshot, orderBy, query } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+  // Firebase config (same as admin.html)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDeuEMpCf90Y8P5M0Xahwi_zMeHZeqod-Q",
+    authDomain: "annsventure-51957.firebaseapp.com",
+    projectId: "annsventure-51957",
+    storageBucket: "annsventure-51957.appspot.com",
+    messagingSenderId: "1054919145056",
+    appId: "1:1054919145056:web:64c35fc1507000984b3505",
+    measurementId: "G-SSN8TYCRWQ"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const loginSection=document.getElementById('login-section');
+  const ordersSection=document.getElementById('orders-section');
+  const emailEl=document.getElementById('email');
+  const passwordEl=document.getElementById('password');
+  const loginBtn=document.getElementById('loginBtn');
+  const logoutBtn=document.getElementById('logoutBtn');
+  const ordersList=document.getElementById('ordersList');
+
+  onAuthStateChanged(auth,(user)=>{
+    if(user){ loginSection.style.display='none'; ordersSection.style.display='block'; loadOrders(); }
+    else { ordersSection.style.display='none'; loginSection.style.display='block'; }
+  });
+
+  loginBtn.addEventListener('click',()=>{
+    signInWithEmailAndPassword(auth,emailEl.value,passwordEl.value)
+      .catch(err=>alert("Login failed: "+err.message));
+  });
+
+  logoutBtn.addEventListener('click',()=>{ signOut(auth); });
+
+  function loadOrders(){
+    const q=query(collection(db,"orders"), orderBy("createdAt","desc"));
+    onSnapshot(q,(snapshot)=>{
+      ordersList.innerHTML='';
+      snapshot.forEach(docSnap=>{
+        const o=docSnap.data();
+        const div=document.createElement('div');
+        div.className='order';
+        div.innerHTML=`
+          <h3>Order by ${o.customer.name||''}</h3>
+          <div class="meta">Email: ${o.customer.email||''} | Phone: ${o.customer.phone||''}</div>
+          <div class="meta">Address: ${o.customer.address||''}</div>
+          <ul class="order-items">
+            ${(o.items||[]).map(i=>`<li>${i.title} — ₦${i.price}</li>`).join('')}
+          </ul>
+          <div class="total">Total: ₦${o.total||0}</div>
+        `;
+        ordersList.appendChild(div);
+      });
+    });
+  }
+</script>
+</body>
+</html>
