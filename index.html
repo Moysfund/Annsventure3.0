@@ -6,51 +6,99 @@
   <title>Ann’s Ventures — Shop</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    :root{
+      --pink:#ff5f9a; --rose:#7a2a56; --border:#f4c2d8; --pill:#ffe4ef;
+    }
+    *{box-sizing:border-box}
     body{margin:0;font-family:'Poppins',sans-serif;background:#fff;color:#2a2a2a}
-    header{background:#ff5f9a;color:#fff;text-align:center;padding:12px;font-weight:600}
-    .contact{background:#fff;border-bottom:1px solid #f4c2d8;color:#7a2a56;text-align:center;padding:8px;font-size:14px}
-    .wrap{max-width:1000px;margin:0 auto;padding:20px}
-    .title{font-family:'Playfair Display',serif;color:#7a2a56;margin:0 0 20px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
-    .product{border:1px solid #f4c2d8;border-radius:14px;padding:12px;background:#fff;box-shadow:0 4px 12px rgba(255,95,154,.1)}
+    header{background:var(--pink);color:#fff;text-align:center;padding:12px;font-weight:600}
+    .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border)}
+    .logo{display:flex;align-items:center;gap:8px}
+    .logo-mark{width:26px;height:26px;border-radius:6px;background:var(--pink)}
+    .logo-text{font-family:'Playfair Display',serif;font-size:20px;color:var(--rose);font-weight:700}
+    .cart{font-weight:600;color:var(--rose)}
+    .banner{background:var(--pill);text-align:center;padding:10px;font-weight:600;color:var(--rose)}
+    .searchbar{display:flex;gap:10px;padding:10px 16px;flex-wrap:wrap}
+    .searchbar input{flex:1;min-width:200px;padding:10px;border:1px solid var(--border);border-radius:8px}
+    .filters{display:flex;gap:8px}
+    .filters button{padding:8px 12px;border:none;border-radius:8px;background:var(--pink);color:#fff;cursor:pointer}
+    .filters button.active{background:#cf3f7c}
+    .wrap{max-width:1000px;margin:0 auto;padding:16px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .product{border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff;box-shadow:0 4px 12px rgba(255,95,154,.08)}
     .product img{width:100%;height:180px;object-fit:cover;border-radius:12px}
-    .pill{background:#ffe4ef;border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64;display:inline-block;margin-top:6px}
-    .price{font-weight:700;color:#ff5f9a;margin-top:6px}
+    .product h3{margin:8px 0 4px;color:var(--rose);font-size:18px}
+    .pill{background:var(--pill);border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64;display:inline-block}
+    .price{font-weight:700;color:var(--pink);margin-top:6px}
     .desc{margin-top:6px;font-size:13px;color:#444}
-    .btn{margin-top:10px;padding:8px 12px;border:none;border-radius:10px;background:#ff5f9a;color:#fff;font-weight:600;cursor:pointer}
-    .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);align-items:center;justify-content:center}
-    .modal-content{background:#fff;padding:20px;border-radius:14px;max-width:400px;width:100%}
-    .modal-content h2{margin-top:0;color:#7a2a56}
-    .modal-content input,.modal-content textarea{width:100%;padding:8px;margin-bottom:10px;border:1px solid #f1c1d7;border-radius:8px}
+    .btn{margin-top:10px;padding:8px 12px;border:none;border-radius:10px;background:var(--pink);color:#fff;font-weight:600;cursor:pointer}
+    .empty{text-align:center;color:var(--rose);padding:20px}
+    /* Modal */
+    .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:16px}
+    .modal-content{background:#fff;padding:20px;border-radius:14px;max-width:420px;width:100%}
+    .modal-content h2{margin-top:0;color:var(--rose)}
+    .cart-list{border:1px solid var(--border);border-radius:12px;padding:10px;max-height:220px;overflow:auto;margin-bottom:10px}
+    .cart-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #f3d0de}
+    .cart-item:last-child{border-bottom:none}
+    .cart-remove{border:none;background:#fff;color:#a33;cursor:pointer;font-weight:600}
+    .total{font-weight:700;color:var(--pink);margin:10px 0}
+    .modal-content input,.modal-content textarea{width:100%;padding:10px;margin-bottom:10px;border:1px solid #f1c1d7;border-radius:8px;font-family:inherit}
+    .modal-actions{display:flex;gap:10px}
+    footer{margin-top:30px;padding:20px;text-align:center;color:#666;font-size:13px;border-top:1px solid var(--border)}
+    footer a{color:var(--rose);text-decoration:none;font-weight:600}
   </style>
 </head>
 <body>
-  <!-- Banner -->
   <header>🚚 Nationwide Delivery Available</header>
-  <!-- Contact strip -->
-  <div class="contact">
-    Email: <a href="mailto:hannahadaja63@gmail.com">hannahadaja63@gmail.com</a> | Phone: <a href="tel:+2349046588565">+234 904 658 8565</a>
+
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-mark"></div>
+      <div class="logo-text">Ann’s Ventures</div>
+    </div>
+    <div class="cart">🛒 (<span id="cart-count">0</span>)</div>
+  </div>
+
+  <div class="banner">New arrivals weekly ✨</div>
+
+  <div class="searchbar">
+    <input id="searchInput" type="text" placeholder="Search products...">
+    <div class="filters">
+      <button data-filter="All" class="active">All</button>
+      <button data-filter="Wear">Wear</button>
+      <button data-filter="Drink">Drink</button>
+    </div>
   </div>
 
   <div class="wrap">
-    <h1 class="title">Ann’s Ventures — Shop</h1>
     <div id="products" class="grid"></div>
+    <div id="no-products" class="empty" style="display:none">No products found.</div>
   </div>
 
   <!-- Checkout Modal -->
   <div id="checkoutModal" class="modal">
     <div class="modal-content">
       <h2>Checkout</h2>
-      <div id="cart-items"></div>
-      <div id="cart-total" style="font-weight:700;color:#ff5f9a;margin:10px 0">Total: ₦0</div>
+      <div class="cart-list" id="cart-items"></div>
+      <div class="total" id="cart-total">Total: ₦0</div>
+
       <input id="custName" type="text" placeholder="Full Name">
       <input id="custEmail" type="email" placeholder="Email">
       <input id="custPhone" type="text" placeholder="Phone">
       <textarea id="custAddress" placeholder="Delivery Address"></textarea>
-      <button id="placeOrderBtn" class="btn">Place Order</button>
-      <button id="closeModalBtn" class="btn ghost" style="margin-top:8px">Cancel</button>
+
+      <div class="modal-actions">
+        <button id="placeOrderBtn" class="btn">Place Order</button>
+        <button id="closeModalBtn" class="btn" style="background:#fff;color:#7a2a56;border:1px solid #f3a6c6">Cancel</button>
+      </div>
     </div>
   </div>
+
+  <footer>
+    © 2026 Ann’s Ventures — Admin |
+    Contact: <a href="mailto:hannahadaja63@gmail.com">hannahadaja63@gmail.com</a> |
+    <a href="admin.html">Product admin</a> • <a href="orders.html">Orders</a>
+  </footer>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
@@ -69,60 +117,116 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // Elements
   const productList = document.getElementById('products');
+  const noProducts = document.getElementById('no-products');
+  const cartCount = document.getElementById('cart-count');
   const checkoutModal = document.getElementById('checkoutModal');
   const cartItemsEl = document.getElementById('cart-items');
   const cartTotalEl = document.getElementById('cart-total');
   const placeOrderBtn = document.getElementById('placeOrderBtn');
   const closeModalBtn = document.getElementById('closeModalBtn');
+  const searchInput = document.getElementById('searchInput');
+  const filterButtons = document.querySelectorAll('.filters button');
 
-  let cart=[];
+  let cart = [];
+  let products = [];
+  let activeFilter = 'All';
 
+  // Cart render
   function updateCart(){
     cartItemsEl.innerHTML='';
     let total=0;
-    cart.forEach((item,i)=>{
-      total+=parseFloat(item.price);
-      const div=document.createElement('div');
-      div.textContent=`${item.title} — ₦${item.price}`;
-      cartItemsEl.appendChild(div);
+    cart.forEach((item,index)=>{
+      const price = parseFloat(item.price) || 0;
+      total += price;
+      const row = document.createElement('div');
+      row.className='cart-item';
+      row.innerHTML = `
+        <span>${item.title} — ₦${price}</span>
+        <button class="cart-remove" data-index="${index}">Remove</button>
+      `;
+      row.querySelector('.cart-remove').addEventListener('click', ()=>{
+        cart.splice(index,1);
+        updateCart();
+      });
+      cartItemsEl.appendChild(row);
     });
     cartTotalEl.textContent='Total: ₦'+total;
+    cartCount.textContent=cart.length;
   }
 
-  const q=query(collection(db,"products"), orderBy("createdAt","desc"));
-  onSnapshot(q,(snapshot)=>{
+  // Products render with search and filter
+  function renderProducts(list){
     productList.innerHTML='';
-    snapshot.forEach(docSnap=>{
-      const p=docSnap.data();
-      const div=document.createElement('div');
-      div.className='product';
-      div.innerHTML=`
+    if(list.length===0){
+      noProducts.style.display='block';
+      return;
+    }
+    noProducts.style.display='none';
+    list.forEach(p=>{
+      const card=document.createElement('div');
+      card.className='product';
+      card.innerHTML=`
         <img src="${p.image||''}" alt="${p.title||''}">
         <h3>${p.title||''}</h3>
         <span class="pill">${p.category||''}</span>
         <div class="price">₦${p.price||0}</div>
         <div class="desc">${p.description||''}</div>
-        <button class="btn">Add to Cart</button>
+        <button class="btn add-to-cart">Add to Cart</button>
       `;
-      div.querySelector('button').addEventListener('click',()=>{
+      card.querySelector('.add-to-cart').addEventListener('click', ()=>{
         cart.push(p);
         updateCart();
         checkoutModal.style.display='flex';
       });
-      productList.appendChild(div);
+      productList.appendChild(card);
+    });
+  }
+
+  // Live products from Firestore
+  const q=query(collection(db,"products"), orderBy("createdAt","desc"));
+  onSnapshot(q,(snapshot)=>{
+    products=[];
+    snapshot.forEach(docSnap=>products.push(docSnap.data()));
+    applySearchAndFilter();
+  });
+
+  // Search
+  searchInput.addEventListener('input', applySearchAndFilter);
+
+  // Filter buttons
+  filterButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      filterButtons.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      applySearchAndFilter();
     });
   });
 
+  function applySearchAndFilter(){
+    const term = searchInput.value.trim().toLowerCase();
+    let list = products;
+    if(activeFilter !== 'All'){
+      list = list.filter(p => (p.category||'').toLowerCase() === activeFilter.toLowerCase());
+    }
+    if(term){
+      list = list.filter(p => (p.title||'').toLowerCase().includes(term));
+    }
+    renderProducts(list);
+  }
+
+  // Place order
   placeOrderBtn.addEventListener('click', async ()=>{
-    if(cart.length===0){alert("Cart is empty");return;}
+    if(cart.length===0){ alert("Cart is empty"); return; }
     const name=document.getElementById('custName').value.trim();
     const email=document.getElementById('custEmail').value.trim();
     const phone=document.getElementById('custPhone').value.trim();
     const address=document.getElementById('custAddress').value.trim();
-    if(!name||!email||!phone||!address){alert("Fill all fields");return;}
+    if(!name||!email||!phone||!address){ alert("Fill all fields"); return; }
 
-    const total=cart.reduce((sum,i)=>sum+parseFloat(i.price),0);
+    const total = cart.reduce((sum,i)=>sum+(parseFloat(i.price)||0),0);
 
     await addDoc(collection(db,"orders"),{
       customer:{name,email,phone,address},
@@ -131,11 +235,18 @@
       createdAt:serverTimestamp()
     });
 
+    cart = [];
+    updateCart();
+    checkoutModal.style.display='none';
     window.location.href = "thankyou.html";
   });
 
-  closeModalBtn.addEventListener('click',()=>{
+  // Close modal
+  closeModalBtn.addEventListener('click', ()=>{
     checkoutModal.style.display='none';
+  });
+  checkoutModal.addEventListener('click', (e)=>{
+    if(e.target===checkoutModal){ checkoutModal.style.display='none'; }
   });
 </script>
 </body>
