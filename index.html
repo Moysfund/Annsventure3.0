@@ -1,277 +1,125 @@
-<!doctype html>
+here<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>ANN'S VENTURES — Shop</title>
-
-  <!-- Fonts -->
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Ann’s Ventures</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
   <style>
-    :root{
-      --pink-1:#ffe4ef;
-      --pink-2:#ffd6e8;
-      --pink-3:#ffb6d5;
-      --accent:#ff5f9a;
-      --accent-2:#ff84b2;
-      --dark:#2a2a2a;
-      --muted:#6b6b6b;
-      --card:#ffffff;
-      --radius:18px;
-      --shadow:0 14px 40px rgba(255, 111, 163, 0.18);
-      --container:1100px;
-    }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:'Poppins',sans-serif;
-      color:var(--dark);
-      background:
-        radial-gradient(1200px 600px at 80% -200px, #fff 0%, var(--pink-1) 60%, #fff 100%),
-        linear-gradient(180deg, #fff 0%, var(--pink-2) 50%, #fff 100%);
-    }
-
-    /* Sparkle background decorations */
-    .sparkles{
-      position:fixed;inset:0;pointer-events:none;z-index:1;
-      background-image:
-        radial-gradient(circle at 20% 15%, rgba(255,182,213,0.6) 0 2px, transparent 3px),
-        radial-gradient(circle at 70% 25%, rgba(255,111,163,0.5) 0 2px, transparent 3px),
-        radial-gradient(circle at 40% 75%, rgba(255,214,232,0.6) 0 2px, transparent 3px),
-        radial-gradient(circle at 85% 60%, rgba(255,132,178,0.5) 0 2px, transparent 3px);
-      animation: twinkle 6s infinite alternate ease-in-out;
-    }
-    @keyframes twinkle{
-      0%{opacity:.5;transform:scale(1)}
-      100%{opacity:.9;transform:scale(1.02)}
-    }
-
-    .container{max-width:var(--container);margin:0 auto;padding:20px}
-
-    /* Grand opening intro */
-    .intro{
-      position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-      background:linear-gradient(135deg, rgba(255,182,213,0.95), rgba(255,214,232,0.95));
-      z-index:9999;backdrop-filter: blur(6px);
-      animation: fadeOut 1s ease 2.4s forwards;
-    }
-    @keyframes fadeOut{to{opacity:0;visibility:hidden}}
-    .intro-card{
-      text-align:center;background:rgba(255,255,255,.85);padding:28px 32px;border-radius:24px;
-      box-shadow: var(--shadow);
-      transform: translateY(0);
-      animation: floatIn .9s cubic-bezier(.2,.7,.2,1) both;
-    }
-    @keyframes floatIn{
-      from{opacity:0;transform:translateY(14px) scale(.98)}
-      to{opacity:1;transform:translateY(0) scale(1)}
-    }
-    .intro-logo{width:120px;height:120px;object-fit:contain;border-radius:22px;border:6px solid var(--pink-2)}
-    .brand-title{font-family:'Playfair Display',serif;font-size:42px;margin:16px 0 6px;color:var(--accent)}
-    .tagline{color:#8b3b64;font-weight:500}
-
-    /* Header */
-    .site-header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.7);backdrop-filter:saturate(120%) blur(8px);border-bottom:1px solid #f6cfe0}
-    .header-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
-    .logo-row{display:flex;align-items:center;gap:12px}
-    .logo-small{height:44px;width:auto}
-    .brand-name{font-family:'Playfair Display',serif;font-weight:700;color:#8b3b64}
-    nav{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-    nav a{
-      display:inline-flex;align-items:center;gap:8px;
-      color:#7a2a56;text-decoration:none;font-weight:600;padding:8px 12px;border-radius:12px
-    }
-    nav a:hover{background:var(--pink-1)}
-    .admin-link{
-      background:linear-gradient(90deg,var(--accent),var(--accent-2));
-      color:#fff;border-radius:14px;padding:10px 14px;box-shadow:0 10px 24px rgba(255,95,154,.28)
-    }
-
-    /* Hero banner */
-    .hero{
-      margin:20px auto 10px;
-      background:linear-gradient(180deg,#fff, var(--pink-1));
-      border-radius:24px;padding:24px;display:flex;gap:20px;align-items:center;justify-content:space-between;
-      box-shadow: var(--shadow);
-    }
-    .hero-text h1{margin:0 0 8px;font-family:'Playfair Display',serif;font-size:32px;color:#7a2a56}
-    .hero-text p{margin:0;color:#8b3b64}
-    .hero-badge{background:#fff;color:#7a2a56;padding:8px 12px;border-radius:999px;border:1px dashed #f3a6c6;font-weight:600}
-
-    /* Sections */
-    .section{margin:28px 0}
-    .section h2{font-family:'Playfair Display',serif;color:#7a2a56;margin:0 0 12px}
-    .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-    .chip{background:#fff;border:1px solid #f1c1d7;color:#7a2a56;padding:8px 12px;border-radius:999px;font-size:14px;cursor:pointer}
-    .chip.active{background:linear-gradient(90deg,var(--pink-2),#fff);border-color:#f08ab5}
-
-    /* Product grid */
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-    .card{
-      background:var(--card);border-radius:18px;padding:12px;box-shadow: var(--shadow);
-      transition:transform .2s ease, box-shadow .2s ease;position:relative;overflow:hidden;
-    }
-    .card::before{
-      content:"";position:absolute;inset:-40% -40% auto auto;width:140px;height:140px;border-radius:50%;
-      background:radial-gradient(circle, rgba(255,182,213,.4), transparent 70%);
-      transform:translate(40px,-40px) rotate(20deg);
-    }
-    .card:hover{transform:translateY(-4px);box-shadow:0 18px 46px rgba(255,95,154,.2)}
-    .card img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px}
-    .card h3{margin:10px 0 2px;font-size:18px;color:#7a2a56}
-    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
-    .pill{background:linear-gradient(90deg,#fff,var(--pink-1));border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64}
-    .price{font-weight:700;color:var(--accent)}
-
-    /* Footer */
-    .site-footer{text-align:center;padding:30px;color:var(--muted)}
-
-    /* Responsive */
-    @media (max-width:980px){ .grid{grid-template-columns:repeat(3,1fr)} }
-    @media (max-width:720px){
-      .header-inner{padding:10px}
-      .hero{flex-direction:column;align-items:flex-start}
-      .grid{grid-template-columns:repeat(2,1fr)}
-    }
-    @media (max-width:460px){
-      .grid{grid-template-columns:1fr}
-      .brand-title{font-size:34px}
-      .intro-logo{width:100px;height:100px}
-    }
+    body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(180deg,#fff,#ffd6e8 50%,#fff);color:#2a2a2a}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .card{background:#fff;border-radius:20px;box-shadow:0 14px 40px rgba(255,95,154,.18);padding:24px;width:100%;max-width:840px}
+    .title{font-family:'Playfair Display',serif;color:#7a2a56;margin:8px 0}
+    .muted{color:#6b6b6b}
+    input,select,button{font-family:inherit}
+    input,select{width:100%;padding:10px;border-radius:12px;border:1px solid #f1c1d7}
+    .btn{padding:10px 14px;border:none;border-radius:12px;background:linear-gradient(90deg,#ff5f9a,#ff84b2);color:#fff;font-weight:600;cursor:pointer}
+    .btn.ghost{background:#fff;color:#7a2a56;border:1px solid #f3a6c6}
+    .list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+    .item{display:flex;gap:12px;align-items:center;border:1px solid #f4c2d8;border-radius:14px;padding:10px;background:#fff}
+    .item img{width:72px;height:72px;border-radius:12px;object-fit:cover}
+    .item .meta{flex:1}
+    .price{font-weight:700;color:#ff5f9a}
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <div class="card">
+      <div class="title">Admin — Ann’s Ventures</div>
+      <div class="muted">Secure login • Manage products • Export backup</div>
 
-  <!-- Grand opening intro -->
-  <div id="intro" class="intro">
-    <div class="intro-card">
-      <img src="assets/logo.png" alt="ANN'S VENTURES logo" class="intro-logo" />
-      <div class="brand-title">ANN'S VENTURES</div>
-      <div class="tagline">Curated wears & natural drinks</div>
-    </div>
-  </div>
+      <!-- Login -->
+      <section id="login-section">
+        <input id="username" type="text" placeholder="admin" />
+        <input id="password" type="password" placeholder="••••••••" />
+        <button id="loginBtn" class="btn">Sign in</button>
+        <button id="setPassBtn" class="btn ghost">Set/Change password</button>
+        <p class="muted">Default user: <strong>admin</strong>. First time? Click “Set/Change password”.</p>
+      </section>
 
-  <!-- Soft sparkles background -->
-  <div class="sparkles" aria-hidden="true"></div>
-
-  <!-- Header -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <div class="logo-row">
-        <img src="assets/logo.png" alt="logo" class="logo-small" />
-        <div class="brand-name">Ann’s Ventures</div>
-      </div>
-      <nav>
-        <a href="#wears">Wears</a>
-        <a href="#drinks">Drinks</a>
-        <a href="#all">All</a>
-        <a href="admin.html" class="admin-link">Admin</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero -->
-  <section class="container hero" id="all">
-    <div class="hero-text">
-      <div class="hero-badge">New arrivals • Soft & feminine</div>
-      <h1>Shop cute wears & healthy drinks</h1>
-      <p>Dresses, tops, shoes — plus Tigernut milk & Zobo made fresh.</p>
-    </div>
-    <img src="assets/logo.png" alt="brand motif" style="height:84px;width:auto;border-radius:18px;border:6px solid #ffd6e8;">
-  </section>
-
-  <!-- Filters -->
-  <div class="container filters">
-    <button class="chip active" data-filter="all">All</button>
-    <button class="chip" data-filter="wear">Wears</button>
-    <button class="chip" data-filter="drink">Drinks</button>
-    <button class="chip" data-filter="under5k">Under ₦5,000</button>
-  </div>
-
-  <!-- Wears -->
-  <main class="container section" id="wears">
-    <h2>Wears</h2>
-    <div id="wears-grid" class="grid"></div>
-  </main>
-
-  <!-- Drinks -->
-  <section class="container section" id="drinks">
-    <h2>Drinks</h2>
-    <div id="drinks-grid" class="grid"></div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="site-footer">
-    <p>© <span id="year"></span> ANN'S VENTURES • Lagos, NG</p>
-  </footer>
-
-  <script>
-    // Year
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Hide intro after animation end (backup in case CSS blocked)
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const intro = document.getElementById('intro');
-        if(intro){ intro.style.display = 'none'; }
-      }, 2600);
-    });
-
-    // Load products (from localStorage saved by admin)
-    const PRODUCTS_KEY = 'av_products';
-    function loadProducts(){
-      try { return JSON.parse(localStorage.getItem(PRODUCTS_KEY) || '[]'); }
-      catch(e){ return []; }
-    }
-
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-
-    function render(filter = 'all'){
-      const products = loadProducts().filter(p => p.published);
-      const wearsGrid = document.getElementById('wears-grid');
-      const drinksGrid = document.getElementById('drinks-grid');
-      wearsGrid.innerHTML = ''; drinksGrid.innerHTML = '';
-
-      const filtered = products.filter(p => {
-        if(filter === 'all') return true;
-        if(filter === 'wear' || filter === 'drink') return p.category === filter;
-        if(filter === 'under5k') return Number(p.price) < 5000;
-        return true;
-      });
-
-      filtered.forEach(p => {
-        const el = document.createElement('div');
-        el.className = 'card';
-        el.innerHTML = `
-          <img src="${p.image || 'assets/logo.png'}" alt="${escapeHtml(p.title)}" />
-          <h3>${escapeHtml(p.title)}</h3>
-          <div class="meta">
-            <span class="pill">${p.category === 'drink' ? 'Drink' : 'Wear'}</span>
-            <span class="price">₦${Number(p.price).toLocaleString('en-NG', {minimumFractionDigits:2})}</span>
+      <!-- Admin area -->
+      <section id="admin-section" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="title">Product Manager</div>
+          <div>
+            <button id="exportBtn" class="btn ghost">Export JSON</button>
+            <button id="logoutBtn" class="btn ghost">Logout</button>
           </div>
-        `;
-        if(p.category === 'drink') drinksGrid.appendChild(el);
-        else wearsGrid.appendChild(el);
-      });
+        </div>
+        <input id="pTitle" type="text" placeholder="Product title" />
+        <select id="pCategory"><option value="wear">Wear</option><option value="drink">Drink</option></select>
+        <input id="pPrice" type="number" placeholder="Price (NGN)" />
+        <input id="pImage" type="file" accept="image/*" />
+        <div id="preview" style="display:none"><img id="previewImg" /></div>
+        <button id="saveBtn" class="btn">Save product</button>
+        <div class="list" id="list"></div>
+      </section>
+    </div>
+  </div>
 
-      if(!wearsGrid.children.length) wearsGrid.innerHTML = '<div class="pill">No wears yet. Check back soon.</div>';
-      if(!drinksGrid.children.length) drinksGrid.innerHTML = '<div class="pill">No drinks yet. Check back soon.</div>';
-    }
+<script>
+const PRODUCTS_KEY='av_products',PASS_KEY='av_admin_pass_hash',USERNAME='admin';
+const loginSection=document.getElementById('login-section'),adminSection=document.getElementById('admin-section');
+const usernameEl=document.getElementById('username'),passwordEl=document.getElementById('password');
+const loginBtn=document.getElementById('loginBtn'),setPassBtn=document.getElementById('setPassBtn');
+const logoutBtn=document.getElementById('logoutBtn'),exportBtn=document.getElementById('exportBtn');
+const pTitle=document.getElementById('pTitle'),pCategory=document.getElementById('pCategory'),pPrice=document.getElementById('pPrice'),pImage=document.getElementById('pImage');
+const preview=document.getElementById('preview'),previewImg=document.getElementById('previewImg'),saveBtn=document.getElementById('saveBtn'),list=document.getElementById('list');
+let currentImageData=null;
 
-    // Filters
-    const chips = document.querySelectorAll('.chip');
-    chips.forEach(ch => ch.addEventListener('click', () => {
-      chips.forEach(c => c.classList.remove('active'));
-      ch.classList.add('active');
-      render(ch.dataset.filter);
-    }));
+async function sha256Hex(msg){const buf=new TextEncoder().encode(msg);const hash=await crypto.subtle.digest('SHA-256',buf);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');}
 
-    render('all');
-  </script>
+// Hide set button if password exists
+if(localStorage.getItem(PASS_KEY)){setPassBtn.style.display='none';}
+
+setPassBtn.addEventListener('click',async()=>{
+  if(localStorage.getItem(PASS_KEY)){alert('Password already set.');return;}
+  const user=(usernameEl.value||USERNAME).trim();if(user!==USERNAME){alert('Username must be "admin"');return;}
+  const newPass=prompt('Enter new admin password:');if(!newPass)return;
+  const h=await sha256Hex(newPass);localStorage.setItem(PASS_KEY,h);
+  alert('Password saved. Use it to login.');setPassBtn.style.display='none';
+});
+
+loginBtn.addEventListener('click',async()=>{
+  const user=(usernameEl.value||'').trim();const pass=passwordEl.value;
+  if(user!==USERNAME){alert('Invalid username');return;}
+  const stored=localStorage.getItem(PASS_KEY);if(!stored){alert('No password set.');return;}
+  const attempt=await sha256Hex(pass);if(attempt!==stored){alert('Invalid password');return;}
+  loginSection.style.display='none';adminSection.style.display='block';renderProducts();
+});
+
+logoutBtn.addEventListener('click',()=>{adminSection.style.display='none';loginSection.style.display='block';});
+
+pImage.addEventListener('change',()=>{
+  const file=pImage.files[0];if(!file)return;
+  const reader=new FileReader();reader.onload=e=>{currentImageData=e.target.result;previewImg.src=currentImageData;preview.style.display='block';};
+  reader.readAsDataURL(file);
+});
+
+saveBtn.addEventListener('click',()=>{
+  const products=JSON.parse(localStorage.getItem(PRODUCTS_KEY)||'[]');
+  products.push({title:pTitle.value,category:pCategory.value,price:pPrice.value,image:currentImageData});
+  localStorage.setItem(PRODUCTS_KEY,JSON.stringify(products));
+  pTitle.value='';pPrice.value='';pImage.value='';preview.style.display='none';currentImageData=null;
+  renderProducts();
+});
+
+function renderProducts(){
+  const products=JSON.parse(localStorage.getItem(PRODUCTS_KEY)||'[]');
+  list.innerHTML='';products.forEach((p,i)=>{
+    const div=document.createElement('div');div.className='item';
+    div.innerHTML=`<img src="${p.image||''}"><div class="meta"><div>${p.title}</div><div class="pill">${p.category}</div><div class="price">₦${p.price}</div></div>`;
+    list.appendChild(div);
+  });
+}
+
+exportBtn.addEventListener('click',()=>{
+  const products=localStorage.getItem(PRODUCTS_KEY)||'[]';
+  const blob=new Blob([products],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='products.json';a.click();
+  URL.revokeObjectURL(url);
+});
+</script>
 </body>
-    </html>
+</html>
