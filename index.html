@@ -4,79 +4,36 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ann’s Ventures — Shop</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --pink:#ff5f9a; --pink2:#ff84b2; --rose:#7a2a56; --border:#f4c2d8; --pill:#ffe4ef;
-    }
-    *{box-sizing:border-box}
     body{margin:0;font-family:'Poppins',sans-serif;background:#fff;color:#2a2a2a}
-    /* Top banners */
-    .notice{background:linear-gradient(90deg,var(--pink),var(--pink2));color:#fff;text-align:center;padding:10px;font-weight:600}
-    .contact{background:#fff;border-bottom:1px solid var(--border);color:#7a2a56;text-align:center;padding:8px;font-size:14px}
-    .contact a{color:#7a2a56;text-decoration:none;font-weight:600}
-    /* Layout */
-    .wrap{max-width:1100px;margin:0 auto;padding:20px}
-    .title{font-family:'Playfair Display',serif;color:var(--rose);margin:0 0 16px}
-    /* Products grid */
+    header{background:#ff5f9a;color:#fff;text-align:center;padding:12px;font-weight:600}
+    .contact{background:#fff;border-bottom:1px solid #f4c2d8;color:#7a2a56;text-align:center;padding:8px;font-size:14px}
+    .wrap{max-width:1000px;margin:0 auto;padding:20px}
+    .title{font-family:'Playfair Display',serif;color:#7a2a56;margin:0 0 20px}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
-    .product{border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff;box-shadow:0 4px 12px rgba(255,95,154,.08)}
+    .product{border:1px solid #f4c2d8;border-radius:14px;padding:12px;background:#fff;box-shadow:0 4px 12px rgba(255,95,154,.1)}
     .product img{width:100%;height:180px;object-fit:cover;border-radius:12px}
-    .pill{background:var(--pill);border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64;display:inline-block;margin-top:6px}
-    .price{font-weight:700;color:var(--pink);margin-top:6px}
+    .pill{background:#ffe4ef;border:1px solid #f3a6c6;border-radius:999px;padding:4px 10px;font-size:12px;color:#8b3b64;display:inline-block;margin-top:6px}
+    .price{font-weight:700;color:#ff5f9a;margin-top:6px}
     .desc{margin-top:6px;font-size:13px;color:#444}
-    .actions{display:flex;gap:10px;margin-top:10px}
-    .btn{padding:8px 12px;border:none;border-radius:10px;background:linear-gradient(90deg,var(--pink),var(--pink2));color:#fff;font-weight:600;cursor:pointer}
-    .btn.ghost{background:#fff;color:var(--rose);border:1px solid #f3a6c6}
-    /* Promo/info strip */
-    .info-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0}
-    .info-card{border:1px solid var(--border);border-radius:12px;padding:12px;background:#fff}
-    .info-card h4{margin:0 0 6px;color:var(--rose)}
-    .info-card p{margin:0;color:#444;font-size:14px}
-    /* Modal checkout */
-    .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:16px}
-    .modal-content{background:#fff;padding:20px;border-radius:14px;max-width:460px;width:100%}
-    .modal-content h2{margin-top:0;color:var(--rose)}
-    .cart-list{border:1px solid var(--border);border-radius:12px;padding:10px;max-height:200px;overflow:auto}
-    .cart-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #f3d0de}
-    .cart-item:last-child{border-bottom:none}
-    .cart-item .title{font-family:'Poppins',sans-serif;color:#333;font-size:14px;margin:0}
-    .cart-remove{border:none;background:#fff;color:#a33;cursor:pointer;font-weight:600}
-    .total{font-weight:700;color:var(--pink);margin:10px 0}
-    .modal-content input,.modal-content textarea{width:100%;padding:10px;margin-bottom:10px;border:1px solid #f1c1d7;border-radius:8px;font-family:inherit}
-    .modal-actions{display:flex;gap:10px}
-    /* Footer */
-    footer{margin-top:30px;padding:20px;text-align:center;color:#666;font-size:13px;border-top:1px solid var(--border)}
+    .btn{margin-top:10px;padding:8px 12px;border:none;border-radius:10px;background:#ff5f9a;color:#fff;font-weight:600;cursor:pointer}
+    .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);align-items:center;justify-content:center}
+    .modal-content{background:#fff;padding:20px;border-radius:14px;max-width:400px;width:100%}
+    .modal-content h2{margin-top:0;color:#7a2a56}
+    .modal-content input,.modal-content textarea{width:100%;padding:8px;margin-bottom:10px;border:1px solid #f1c1d7;border-radius:8px}
   </style>
 </head>
 <body>
-  <!-- Nationwide Delivery banner -->
-  <div class="notice">🚚 Nationwide Delivery Available — Order today and get it fast!</div>
+  <!-- Banner -->
+  <header>🚚 Nationwide Delivery Available</header>
   <!-- Contact strip -->
   <div class="contact">
-    Need help? Email <a href="mailto:hannahadaja63@gmail.com">hannahadaja63@gmail.com</a> or call <a href="tel:+2349046588565">+234 904 658 8565</a>
+    Email: <a href="mailto:hannahadaja63@gmail.com">hannahadaja63@gmail.com</a> | Phone: <a href="tel:+2349046588565">+234 904 658 8565</a>
   </div>
 
   <div class="wrap">
     <h1 class="title">Ann’s Ventures — Shop</h1>
-
-    <!-- Info highlights -->
-    <div class="info-strip">
-      <div class="info-card">
-        <h4>Fast delivery</h4>
-        <p>We deliver nationwide. Reliable dispatch to your doorstep.</p>
-      </div>
-      <div class="info-card">
-        <h4>Quality guaranteed</h4>
-        <p>Curated products for wear and drink categories — fresh, authentic, and stylish.</p>
-      </div>
-      <div class="info-card">
-        <h4>Easy checkout</h4>
-        <p>Add to cart and complete your order in seconds with our simple pop‑up checkout.</p>
-      </div>
-    </div>
-
-    <!-- Products -->
     <div id="products" class="grid"></div>
   </div>
 
@@ -84,34 +41,21 @@
   <div id="checkoutModal" class="modal">
     <div class="modal-content">
       <h2>Checkout</h2>
-
-      <!-- Cart items -->
-      <div class="cart-list" id="cart-items"></div>
-      <div class="total" id="cart-total">Total: ₦0</div>
-
-      <!-- Customer details -->
+      <div id="cart-items"></div>
+      <div id="cart-total" style="font-weight:700;color:#ff5f9a;margin:10px 0">Total: ₦0</div>
       <input id="custName" type="text" placeholder="Full Name">
       <input id="custEmail" type="email" placeholder="Email">
       <input id="custPhone" type="text" placeholder="Phone">
       <textarea id="custAddress" placeholder="Delivery Address"></textarea>
-
-      <!-- Actions -->
-      <div class="modal-actions">
-        <button id="placeOrderBtn" class="btn">Place Order</button>
-        <button id="closeModalBtn" class="btn ghost">Cancel</button>
-      </div>
+      <button id="placeOrderBtn" class="btn">Place Order</button>
+      <button id="closeModalBtn" class="btn ghost" style="margin-top:8px">Cancel</button>
     </div>
   </div>
-
-  <footer>
-    © Ann’s Ventures — All rights reserved
-  </footer>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
   import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-  // Firebase config (same project as your admin)
   const firebaseConfig = {
     apiKey: "AIzaSyDeuEMpCf90Y8P5M0Xahwi_zMeHZeqod-Q",
     authDomain: "annsventure-51957.firebaseapp.com",
@@ -125,7 +69,6 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Elements
   const productList = document.getElementById('products');
   const checkoutModal = document.getElementById('checkoutModal');
   const cartItemsEl = document.getElementById('cart-items');
@@ -133,101 +76,66 @@
   const placeOrderBtn = document.getElementById('placeOrderBtn');
   const closeModalBtn = document.getElementById('closeModalBtn');
 
-  // Cart state
-  let cart = [];
+  let cart=[];
 
-  // Render cart
   function updateCart(){
-    cartItemsEl.innerHTML = '';
-    let total = 0;
-
-    cart.forEach((item, index)=>{
-      total += parseFloat(item.price) || 0;
-      const row = document.createElement('div');
-      row.className = 'cart-item';
-      row.innerHTML = `
-        <span class="title">${item.title} — ₦${item.price}</span>
-        <button class="cart-remove" data-index="${index}">Remove</button>
-      `;
-      row.querySelector('.cart-remove').addEventListener('click', ()=>{
-        cart.splice(index,1);
-        updateCart();
-      });
-      cartItemsEl.appendChild(row);
+    cartItemsEl.innerHTML='';
+    let total=0;
+    cart.forEach((item,i)=>{
+      total+=parseFloat(item.price);
+      const div=document.createElement('div');
+      div.textContent=`${item.title} — ₦${item.price}`;
+      cartItemsEl.appendChild(div);
     });
-
-    cartTotalEl.textContent = 'Total: ₦' + total;
+    cartTotalEl.textContent='Total: ₦'+total;
   }
 
-  // Live products from Firestore
-  const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
-  onSnapshot(q, (snapshot)=>{
-    productList.innerHTML = '';
+  const q=query(collection(db,"products"), orderBy("createdAt","desc"));
+  onSnapshot(q,(snapshot)=>{
+    productList.innerHTML='';
     snapshot.forEach(docSnap=>{
-      const p = docSnap.data();
-      const card = document.createElement('div');
-      card.className = 'product';
-      card.innerHTML = `
-        <img src="${p.image || ''}" alt="${p.title || ''}">
-        <h3 class="title" style="font-size:18px;margin:8px 0;color:${'#7a2a56'}">${p.title || ''}</h3>
-        <span class="pill">${p.category || ''}</span>
-        <div class="price">₦${p.price || 0}</div>
-        <div class="desc">${p.description || ''}</div>
-        <div class="actions">
-          <button class="btn add">Add to Cart</button>
-          <button class="btn ghost details">Details</button>
-        </div>
+      const p=docSnap.data();
+      const div=document.createElement('div');
+      div.className='product';
+      div.innerHTML=`
+        <img src="${p.image||''}" alt="${p.title||''}">
+        <h3>${p.title||''}</h3>
+        <span class="pill">${p.category||''}</span>
+        <div class="price">₦${p.price||0}</div>
+        <div class="desc">${p.description||''}</div>
+        <button class="btn">Add to Cart</button>
       `;
-      // Add to cart opens modal
-      card.querySelector('.add').addEventListener('click', ()=>{
+      div.querySelector('button').addEventListener('click',()=>{
         cart.push(p);
         updateCart();
-        checkoutModal.style.display = 'flex';
+        checkoutModal.style.display='flex';
       });
-      // Optional "Details" behavior: open modal with just this item in cart
-      card.querySelector('.details').addEventListener('click', ()=>{
-        cart = [p];
-        updateCart();
-        checkoutModal.style.display = 'flex';
-      });
-
-      productList.appendChild(card);
+      productList.appendChild(div);
     });
   });
 
-  // Place order
   placeOrderBtn.addEventListener('click', async ()=>{
-    if(cart.length === 0){ alert("Cart is empty"); return; }
-    const name = document.getElementById('custName').value.trim();
-    const email = document.getElementById('custEmail').value.trim();
-    const phone = document.getElementById('custPhone').value.trim();
-    const address = document.getElementById('custAddress').value.trim();
-    if(!name || !email || !phone || !address){ alert("Fill all fields"); return; }
+    if(cart.length===0){alert("Cart is empty");return;}
+    const name=document.getElementById('custName').value.trim();
+    const email=document.getElementById('custEmail').value.trim();
+    const phone=document.getElementById('custPhone').value.trim();
+    const address=document.getElementById('custAddress').value.trim();
+    if(!name||!email||!phone||!address){alert("Fill all fields");return;}
 
-    const total = cart.reduce((sum,i)=>sum + (parseFloat(i.price) || 0), 0);
+    const total=cart.reduce((sum,i)=>sum+parseFloat(i.price),0);
 
     await addDoc(collection(db,"orders"),{
-      customer: { name, email, phone, address },
-      items: cart,
+      customer:{name,email,phone,address},
+      items:cart,
       total,
-      createdAt: serverTimestamp()
+      createdAt:serverTimestamp()
     });
 
-    // Reset and go to thank-you page
-    cart = [];
-    updateCart();
-    checkoutModal.style.display = 'none';
     window.location.href = "thankyou.html";
   });
 
-  // Close modal
-  closeModalBtn.addEventListener('click', ()=>{
-    checkoutModal.style.display = 'none';
-  });
-
-  // Close modal on backdrop click
-  checkoutModal.addEventListener('click', (e)=>{
-    if(e.target === checkoutModal){ checkoutModal.style.display = 'none'; }
+  closeModalBtn.addEventListener('click',()=>{
+    checkoutModal.style.display='none';
   });
 </script>
 </body>
